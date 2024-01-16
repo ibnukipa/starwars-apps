@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -16,6 +16,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import RNBootSplash from 'react-native-bootsplash';
 
 import {
   Colors,
@@ -31,8 +32,20 @@ type SectionProps = PropsWithChildren<{
 
 function Section({children, title}: SectionProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+
+  useEffect(() => {
+    const init = async () => {
+      //
+    };
+
+    init().finally(async () => {
+      await RNBootSplash.hide({fade: true});
+    });
+  }, []);
+
   return (
     <View style={styles.sectionContainer}>
+      <StatusBar barStyle={'light-content'} />
       <Text
         style={[
           styles.sectionTitle,
