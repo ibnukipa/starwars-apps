@@ -1,72 +1,73 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Doctor Apps
+StarWars communication apps
 
-# Getting Started
+## Preview
+- iOS: 
+- Android: 
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Prerequisites
+#### Common
+- nodeJS (v18)
+- yarn
+- watchman
 
-## Step 1: Start the Metro Server
+#### Android
+- JDK 17
+- Android Studio
+- Android SDK
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+#### iOS
+- Xcode
+- CocoaPods
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## Running Apps
+Please navigate to root project.
 
-```bash
-# using npm
-npm start
+#### Installing
 
-# OR using Yarn
-yarn start
-```
+First install NPM dependencies:
 
-## Step 2: Start your Application
+> yarn install
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+Then, install iOS dependencies:
+> cd ios && pod install
 
-### For Android
+#### Run on Android
+Open your emulator with Android Studio or connect your Android device to your machine.
 
-```bash
-# using npm
-npm run android
+Then, simply run:
+> yarn android
 
-# OR using Yarn
-yarn android
-```
+#### Run on iOS
+Open your simulator. Then, simply run:
+> yarn ios
 
-### For iOS
+## Key Dependencies
+This section will list down all dependencies and explain pro's and con's
 
-```bash
-# using npm
-npm run ios
+#### react-native-bootsplash
+This package is to maintain the splashscreen / bootsplash for the app. It works for Android and iOS natively and easy to set up.
+The drawbacks for this package is unable to create a complex exit animation but fade animation.
 
-# OR using Yarn
-yarn ios
-```
+#### react-navigation
+This package is required to enable navigation in react native app. This navigation lib is the most use of the others.
+It's easy to use and the concept is quite simple. In the latest version, It also already support for native navigation.
+The drawback is this navigation library wasn't implemented from native at first place. So the integration with native is done by the hacky way.
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+#### zustand
+A small, fast and scalable bearbones state-management solution using simplified flux principles. Has a comfy API based on hooks, isn't boilerplatey or opinionated.
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+## Improvements
+- 
 
-## Step 3: Modifying your App
+## Production
+- Create .env based on release / build variant.
+- Need to handle certificates for each store.
+- Provide banners for stores
+- Enable proguard if needed
 
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+## Assumptions
+- 
 
 # Learn More
 
