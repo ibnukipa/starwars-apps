@@ -8,13 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* StarWarsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* StarWarsTests.m */; };
+		06A0F01BA65B437EA80E87D9 /* Dosis-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D716DD07235D48FDA0445E5D /* Dosis-ExtraBold.ttf */; };
 		0C80B921A6F3F58F76C31292 /* libPods-StarWars.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-StarWars.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		168E52FA2B5622F500F4D806 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 168E52F92B5622F500F4D806 /* BootSplash.storyboard */; };
+		168E53002B563F6400F4D806 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 168E52FF2B563F6400F4D806 /* BootSplash.storyboard */; };
+		1AF1A4FD964D46538D55A333 /* Dosis-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 17906AD9D5B342419C382A8B /* Dosis-Regular.ttf */; };
+		1BC0A0453344400F97E28106 /* Dosis-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 75E22DB438FB4B51B58708EC /* Dosis-Bold.ttf */; };
+		4D16CB14FC784F478FDB9531 /* Dosis-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 218A0C70746E4D6A95B4D774 /* Dosis-ExtraLight.ttf */; };
+		59E626FC782A403A80744EAC /* Dosis-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B8D9D2AF59C4CDE9C8D03C1 /* Dosis-SemiBold.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-StarWars-StarWarsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-StarWars-StarWarsTests.a */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		B55CFDC4683640E6AA52E7C2 /* Dosis-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E81D7809B06745D8B2E22173 /* Dosis-Medium.ttf */; };
+		CB29BB621E4F42C7A1D7523A /* Dosis-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D3697EF309C46B486B6CDE7 /* Dosis-Light.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,14 +43,20 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = StarWars/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = StarWars/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = StarWars/main.m; sourceTree = "<group>"; };
-		168E52F92B5622F500F4D806 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = StarWars/BootSplash.storyboard; sourceTree = "<group>"; };
+		168E52FF2B563F6400F4D806 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = StarWars/BootSplash.storyboard; sourceTree = "<group>"; };
+		17906AD9D5B342419C382A8B /* Dosis-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Dosis-Regular.ttf"; path = "../app/assets/fonts/Dosis-Regular.ttf"; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-StarWars-StarWarsTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-StarWars-StarWarsTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		218A0C70746E4D6A95B4D774 /* Dosis-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Dosis-ExtraLight.ttf"; path = "../app/assets/fonts/Dosis-ExtraLight.ttf"; sourceTree = "<group>"; };
+		2D3697EF309C46B486B6CDE7 /* Dosis-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Dosis-Light.ttf"; path = "../app/assets/fonts/Dosis-Light.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-StarWars.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StarWars.debug.xcconfig"; path = "Target Support Files/Pods-StarWars/Pods-StarWars.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-StarWars.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StarWars.release.xcconfig"; path = "Target Support Files/Pods-StarWars/Pods-StarWars.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-StarWars-StarWarsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StarWars-StarWarsTests.debug.xcconfig"; path = "Target Support Files/Pods-StarWars-StarWarsTests/Pods-StarWars-StarWarsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-StarWars.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-StarWars.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = StarWars/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		75E22DB438FB4B51B58708EC /* Dosis-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Dosis-Bold.ttf"; path = "../app/assets/fonts/Dosis-Bold.ttf"; sourceTree = "<group>"; };
+		7B8D9D2AF59C4CDE9C8D03C1 /* Dosis-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Dosis-SemiBold.ttf"; path = "../app/assets/fonts/Dosis-SemiBold.ttf"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-StarWars-StarWarsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StarWars-StarWarsTests.release.xcconfig"; path = "Target Support Files/Pods-StarWars-StarWarsTests/Pods-StarWars-StarWarsTests.release.xcconfig"; sourceTree = "<group>"; };
+		D716DD07235D48FDA0445E5D /* Dosis-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Dosis-ExtraBold.ttf"; path = "../app/assets/fonts/Dosis-ExtraBold.ttf"; sourceTree = "<group>"; };
+		E81D7809B06745D8B2E22173 /* Dosis-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Dosis-Medium.ttf"; path = "../app/assets/fonts/Dosis-Medium.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -90,10 +102,9 @@
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				168E52FF2B563F6400F4D806 /* BootSplash.storyboard */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
-				168E52F92B5622F500F4D806 /* BootSplash.storyboard */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = StarWars;
@@ -107,6 +118,20 @@
 				19F6CBCC0A4E27FBF8BF4A61 /* libPods-StarWars-StarWarsTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5E14132F37B943BCAF9C8E85 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				75E22DB438FB4B51B58708EC /* Dosis-Bold.ttf */,
+				D716DD07235D48FDA0445E5D /* Dosis-ExtraBold.ttf */,
+				218A0C70746E4D6A95B4D774 /* Dosis-ExtraLight.ttf */,
+				2D3697EF309C46B486B6CDE7 /* Dosis-Light.ttf */,
+				E81D7809B06745D8B2E22173 /* Dosis-Medium.ttf */,
+				17906AD9D5B342419C382A8B /* Dosis-Regular.ttf */,
+				7B8D9D2AF59C4CDE9C8D03C1 /* Dosis-SemiBold.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -125,6 +150,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				5E14132F37B943BCAF9C8E85 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -244,9 +270,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				168E52FA2B5622F500F4D806 /* BootSplash.storyboard in Resources */,
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				1BC0A0453344400F97E28106 /* Dosis-Bold.ttf in Resources */,
+				06A0F01BA65B437EA80E87D9 /* Dosis-ExtraBold.ttf in Resources */,
+				168E53002B563F6400F4D806 /* BootSplash.storyboard in Resources */,
+				4D16CB14FC784F478FDB9531 /* Dosis-ExtraLight.ttf in Resources */,
+				CB29BB621E4F42C7A1D7523A /* Dosis-Light.ttf in Resources */,
+				B55CFDC4683640E6AA52E7C2 /* Dosis-Medium.ttf in Resources */,
+				1AF1A4FD964D46538D55A333 /* Dosis-Regular.ttf in Resources */,
+				59E626FC782A403A80744EAC /* Dosis-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
