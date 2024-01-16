@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
+    backgroundColor: 'white',
   },
   title: {
     color: 'black',
