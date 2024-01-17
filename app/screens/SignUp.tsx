@@ -1,39 +1,49 @@
-import React, { useCallback, useId, useReducer } from "react";
-import { ScrollView, StatusBar, StyleSheet, TextInput, View } from "react-native";
-import { StackScreenProps } from "@react-navigation/stack";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, {useCallback, useId} from 'react';
+import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
+import {StackScreenProps} from '@react-navigation/stack';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
-import { Button, FontFamilyStyle, Icon, IconSize, InputText, InputTextSize, Text } from "../components";
-import { BaseStyle } from "../styles/base.ts";
-import { RootStackParamList } from "../routes/types.ts";
-import { Colors } from "../constants";
-import { useAuthStore, useUserStore } from "../stores";
-import { RegistrationFormActions, registrationFormInitialValues, registrationFormReducer } from "../forms";
+import {
+  Button,
+  Icon,
+  IconSize,
+  InputText,
+  InputTextSize,
+  Text,
+} from '../components';
+import {BaseStyle} from '../styles/base.ts';
+import {RootStackParamList} from '../routes/types.ts';
+import {Colors} from '../constants';
+import {useAuthStore, useUserStore} from '../stores';
+import {
+  RegistrationForm,
+  RegistrationFormActions,
+  registrationFormInitialValues,
+  registrationFormReducer,
+} from '../forms';
+import {useForm} from '../hooks';
 
 const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
   navigation,
 }) => {
+  const register = useUserStore(state => state.register);
   const registrationErrorMessage = useAuthStore(
     state => state.registrationErrorMessage,
   );
   const resetRegistrationErrorMessage = useAuthStore(
     state => state.resetRegistrationErrorMessage,
   );
-  const register = useUserStore(state => state.register);
 
   const tempId = useId();
-  const [formState, formDispatch] = useReducer(
-    registrationFormReducer,
-    registrationFormInitialValues,
-  );
-  const setFormValue = useCallback(
-    (formKey: RegistrationFormActions) => (value: string) => {
-      formDispatch({type: formKey, value});
-    },
-    [],
-  );
+  const [formState, formSetValue] = useForm<
+    RegistrationForm,
+    RegistrationFormActions
+  >(registrationFormReducer, registrationFormInitialValues);
 
-  const registerPress = useCallback(() => {}, [register, formState]);
+  const registerPress = useCallback(() => {
+    console.log(tempId);
+    console.log(formState);
+  }, [formState, tempId]);
 
   return (
     <SafeAreaView edges={['left', 'right']} style={BaseStyle.container}>
@@ -64,7 +74,7 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
           <InputText
             size={InputTextSize.SMALL}
             label={'Email'}
-            onChangeText={setFormValue('setEmail')}
+            onChangeText={formSetValue('setEmail')}
             onFocus={resetRegistrationErrorMessage}
             placeholder={'john.doe@gmail.com'}
             autoCapitalize={'none'}
@@ -74,14 +84,14 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
           <InputText
             size={InputTextSize.SMALL}
             label={'First name'}
-            onChangeText={setFormValue('setFirstName')}
+            onChangeText={formSetValue('setFirstName')}
             onFocus={resetRegistrationErrorMessage}
             placeholder={'John'}
           />
           <InputText
             size={InputTextSize.SMALL}
             label={'Last name'}
-            onChangeText={setFormValue('setLastName')}
+            onChangeText={formSetValue('setLastName')}
             onFocus={resetRegistrationErrorMessage}
             placeholder={'Doe'}
           />
@@ -89,7 +99,7 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
           <InputText
             size={InputTextSize.SMALL}
             label={'Password'}
-            onChangeText={setFormValue('setPassword')}
+            onChangeText={formSetValue('setPassword')}
             onFocus={resetRegistrationErrorMessage}
             placeholder={'Password'}
             secureTextEntry
@@ -97,7 +107,7 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
           <InputText
             size={InputTextSize.SMALL}
             label={'Confirm password'}
-            onChangeText={setFormValue('setConfirmPassword')}
+            onChangeText={formSetValue('setConfirmPassword')}
             onFocus={resetRegistrationErrorMessage}
             placeholder={'Password'}
             secureTextEntry
@@ -106,7 +116,7 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
           <InputText
             size={InputTextSize.SMALL}
             label={'Job Title'}
-            onChangeText={setFormValue('setJobTitle')}
+            onChangeText={formSetValue('setJobTitle')}
             onFocus={resetRegistrationErrorMessage}
             placeholder={'Jedi'}
           />

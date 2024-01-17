@@ -12,7 +12,7 @@ export enum InputTextSize {
 }
 
 export interface InputTextProps extends TextInputProps {
-  size: InputTextSize;
+  size?: InputTextSize;
   label?: string;
 }
 

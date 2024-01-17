@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, TextInput, View, StatusBar} from 'react-native';
+import React, {useCallback, useEffect} from 'react';
+import {StyleSheet, View, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StackScreenProps} from '@react-navigation/stack';
 
@@ -7,15 +7,21 @@ import {
   Button,
   ButtonVariant,
   Text,
-  FontFamilyStyle,
   showToast,
   KeyboardAvoidingView,
+  InputText,
 } from '../components';
 import {BaseStyle} from '../styles/base.ts';
 import {RootStackParamList} from '../routes/types.ts';
 import {useAuthStore} from '../stores';
 import {Colors, Radii, Spaces} from '../constants';
-import {useKeyboardAppearance} from '../hooks';
+import {useForm, useKeyboardAppearance} from '../hooks';
+import {
+  loginFormReducer,
+  loginFormInitialValues,
+  LoginForm,
+  LoginFormActions,
+} from '../forms';
 
 const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
   navigation,
@@ -24,8 +30,10 @@ const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
   const errorMessage = useAuthStore(state => state.errorMessage);
   const resetErrorMessage = useAuthStore(state => state.resetErrorMessage);
 
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [formState, formSetValue] = useForm<LoginForm, LoginFormActions>(
+    loginFormReducer,
+    loginFormInitialValues,
+  );
 
   const isKeyboardShowed = useKeyboardAppearance();
 
@@ -38,22 +46,14 @@ const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
   }, [errorMessage]);
 
   const signInPress = useCallback(() => {
-    if (email && password) {
-      login(email, password);
+    if (formState.email && formState.password) {
+      login(formState.email, formState.password);
     }
-  }, [login, email, password]);
+  }, [login, formState]);
 
   const signUpPress = useCallback(() => {
     navigation.navigate('SignUp');
   }, [navigation]);
-
-  const onEmailChange = useCallback((text: string) => {
-    setEmail(text);
-  }, []);
-
-  const onPasswordChange = useCallback((text: string) => {
-    setPassword(text);
-  }, []);
 
   return (
     <SafeAreaView style={BaseStyle.container}>
@@ -83,27 +83,20 @@ const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
           </View>
         )}
         <View style={styles.formContainer}>
-          <View style={[BaseStyle.textInputContainer, BaseStyle.space]}>
-            <TextInput
-              onChangeText={onEmailChange}
-              onFocus={resetErrorMessage}
-              placeholderTextColor={Colors.neutralPlaceholderText}
-              placeholder={'Your e-mail address'}
-              style={[BaseStyle.textInput, FontFamilyStyle['500-normal']]}
-            />
-          </View>
-          <View style={[BaseStyle.textInputContainer, BaseStyle.space]}>
-            <TextInput
-              onChangeText={onPasswordChange}
-              onFocus={resetErrorMessage}
-              placeholderTextColor={Colors.neutralPlaceholderText}
-              placeholder={'Password'}
-              secureTextEntry
-              style={[BaseStyle.textInput, FontFamilyStyle['500-normal']]}
-            />
-          </View>
+          <InputText
+            onChangeText={formSetValue('setEmail')}
+            onFocus={resetErrorMessage}
+            placeholderTextColor={Colors.neutralPlaceholderText}
+            placeholder={'Your e-mail address'}
+          />
+          <InputText
+            onChangeText={formSetValue('setPassword')}
+            onFocus={resetErrorMessage}
+            placeholder={'Password'}
+            secureTextEntry
+          />
           <Button
-            isDisabled={!email || !password}
+            isDisabled={!formState.email || !formState.password}
             onPress={signInPress}
             style={BaseStyle.space}
             variant={ButtonVariant.PRIMARY}>
