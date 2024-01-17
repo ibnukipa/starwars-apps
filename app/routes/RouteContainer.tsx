@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import {
   createStackNavigator,
   StackNavigationOptions,
@@ -9,6 +9,7 @@ import RNBootSplash from 'react-native-bootsplash';
 
 import {Home, SignIn, SignUp} from '../screens';
 import {RootStackParamList} from './types.ts';
+import {useAuthStore} from '../stores';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 const RootScreenOptions: StackNavigationOptions = {
@@ -27,16 +28,7 @@ const ScreenSlideRightOptions: StackNavigationOptions = {
 };
 
 const RouteContainer: React.FC = () => {
-  // TODO: remove isLoggedIn when state management is configured
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
-  const signInPress = useCallback(() => {
-    setIsLoggedIn(true);
-  }, []);
-
-  const signOutPress = useCallback(() => {
-    setIsLoggedIn(false);
-  }, []);
+  const isLoggedIn = useAuthStore(state => state.isLoggedIn);
 
   const onNavigationReady = useCallback(() => {
     const init = async () => {
@@ -60,7 +52,6 @@ const RouteContainer: React.FC = () => {
               name={'Home'}
               component={Home}
               options={ScreenSlideRightOptions}
-              initialParams={{signOutPress}}
             />
           </>
         ) : (
@@ -69,7 +60,6 @@ const RouteContainer: React.FC = () => {
               name={'SignIn'}
               component={SignIn}
               options={ScreenScaleCenterOptions}
-              initialParams={{signInPress}}
             />
             <RootStack.Screen
               name={'SignUp'}

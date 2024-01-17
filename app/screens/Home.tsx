@@ -6,10 +6,11 @@ import {Button, ButtonVariant, Text} from '../components';
 import {BaseStyle} from '../styles/base.ts';
 import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackParamList} from '../routes/types.ts';
+import {useAuthStore} from '../stores';
 
-const Home: React.FC<StackScreenProps<RootStackParamList, 'Home'>> = ({
-  route,
-}) => {
+const Home: React.FC<StackScreenProps<RootStackParamList, 'Home'>> = () => {
+  const logoutPress = useAuthStore(state => state.logout);
+
   return (
     <SafeAreaView
       style={[BaseStyle.container, BaseStyle.pad, BaseStyle.centered]}>
@@ -24,7 +25,7 @@ const Home: React.FC<StackScreenProps<RootStackParamList, 'Home'>> = ({
       </Text>
       <View>
         <Button
-          onPress={route.params?.signOutPress}
+          onPress={logoutPress}
           style={BaseStyle.space}
           variant={ButtonVariant.TERTIARY}>
           Sign Out
