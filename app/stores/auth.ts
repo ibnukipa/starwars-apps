@@ -7,19 +7,22 @@ interface AuthState {
   isLoggedIn: boolean;
   user: User | null;
   errorMessage: string | null;
+  registrationErrorMessage: string | null;
 }
 
 interface AuthActions {
   login: (email: string, password: string) => void;
   logout: () => void;
   resetErrorMessage: () => void;
+  resetRegistrationErrorMessage: () => void;
 }
 
 const useAuthStore = create(
   immer<AuthState & AuthActions>(setState => ({
     isLoggedIn: false,
-    errorMessage: null,
     user: null,
+    errorMessage: null,
+    registrationErrorMessage: null,
     login: (email, password) => {
       const user = useUserStore.getState().getByEmail(email);
       // TODO decrypt the password
@@ -27,6 +30,7 @@ const useAuthStore = create(
         setState(state => {
           state.isLoggedIn;
           state.user = user;
+          // TODO add lastLocation
 
           return state;
         });
@@ -50,6 +54,13 @@ const useAuthStore = create(
     resetErrorMessage: () => {
       setState(state => {
         state.errorMessage = null;
+
+        return state;
+      });
+    },
+    resetRegistrationErrorMessage: () => {
+      setState(state => {
+        state.registrationErrorMessage = null;
 
         return state;
       });

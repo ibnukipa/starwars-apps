@@ -7,8 +7,8 @@ export interface User {
   firstName: string;
   lastName: string;
   password: string;
-  jobTitle: string;
-  lastLocation: string;
+  jobTitle?: string;
+  lastLocation?: string;
 }
 
 interface UserState {
@@ -31,6 +31,7 @@ const useUserStore = create(
       setState(state => {
         // TODO encrypt the password
         state.users[user.email] = user;
+        // TODO add lastLocation
         return state;
       });
     },

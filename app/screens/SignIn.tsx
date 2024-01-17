@@ -23,6 +23,7 @@ const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
   const login = useAuthStore(state => state.login);
   const errorMessage = useAuthStore(state => state.errorMessage);
   const resetErrorMessage = useAuthStore(state => state.resetErrorMessage);
+
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -97,6 +98,7 @@ const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
               onFocus={resetErrorMessage}
               placeholderTextColor={Colors.neutralPlaceholderText}
               placeholder={'Password'}
+              secureTextEntry
               style={[BaseStyle.textInput, FontFamilyStyle['500-normal']]}
             />
           </View>
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
     top: '5%',
   },
   formContainer: {
-    padding: Spaces.large,
+    padding: Spaces.regular,
     borderRadius: Radii.large,
     borderWidth: 0.5,
     borderColor: Colors.neutralContainer,
