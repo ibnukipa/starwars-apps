@@ -9,6 +9,9 @@ export const BaseStyle = StyleSheet.create({
   keyboardAvoidingContainer: {
     flex: 1,
   },
+  flex: {
+    flex: 1,
+  },
   pad: {
     padding: Spaces.regular,
   },
@@ -22,26 +25,43 @@ export const BaseStyle = StyleSheet.create({
   title: {
     fontSize: FontSizes.xxLarge,
   },
+  heading2: {
+    fontSize: FontSizes.xLarge,
+  },
+  heading3: {
+    fontSize: FontSizes.large,
+  },
   subTitle: {
     fontSize: FontSizes.large,
+  },
+  textUppercase: {
+    textTransform: 'uppercase',
   },
   textCenter: {
     textAlign: 'center',
   },
-  // TODO create TextInput component
-  textInputContainer: {
-    justifyContent: 'center',
-    borderRadius: Radii.regular,
-    paddingHorizontal: Spaces.regular,
-    borderColor: Colors.neutralBorder,
-    height: Heights.input,
-    borderWidth: 1,
+  textRight: {
+    textAlign: 'right',
   },
-  textInput: {
-    paddingTop: 0,
-    paddingBottom: 0,
-    paddingLeft: 0,
-    paddingRight: 0,
-    fontSize: FontSizes.large,
+  row: {
+    flexDirection: 'row',
+  },
+  verticalCentered: {
+    alignItems: 'center',
+  },
+  spaceBetween: {
+    justifyContent: 'space-between',
+  },
+  headerContainer: {
+    paddingBottom: Spaces.small,
+    borderBottomWidth: 1,
+    borderColor: Colors.neutralBorder,
+  },
+  // TODO create divider component
+  divider: {
+    marginVertical: Spaces.tiny,
+    height: 1,
+    backgroundColor: Colors.citrusYellowPlus1,
+    width: '100%',
   },
 });

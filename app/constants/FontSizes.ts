@@ -4,6 +4,7 @@ const FontSizes = {
   small: 14,
   regular: 16,
   medium: 18,
+  xMedium: 20,
   large: 24,
   xLarge: 32,
   xxLarge: 46,

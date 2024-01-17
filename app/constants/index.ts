@@ -10,3 +10,4 @@ export {default as Radii} from './Radii.ts';
 export {default as Heights} from './Heights.ts';
 export {default as Spaces} from './Spaces.ts';
 export {default as FontSizes} from './FontSizes.ts';
+export {default as Icons, type IIcons} from './Icons.ts';
