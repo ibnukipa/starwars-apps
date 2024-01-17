@@ -49,6 +49,7 @@ const Button: React.FC<ButtonProps> = ({
     bgStyle,
     pressedBgStyle,
     sizeStyle,
+    textSizeStyle,
   } = useButtonStyle(variant, isDisabled, colorScheme, size);
   const [isPressing, setIsPressing] = useState(false);
 
@@ -66,7 +67,7 @@ const Button: React.FC<ButtonProps> = ({
         <Text
           color={isPressing || isLoading ? childrenPressedColor : childrenColor}
           bold
-          style={styles.text}>
+          style={textSizeStyle}>
           {children.toUpperCase()}
         </Text>
       );

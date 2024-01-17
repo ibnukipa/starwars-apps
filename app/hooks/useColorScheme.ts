@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import Colors, {IColors, IColorSchemes} from '../constants/colors';
+import {Colors, IColors, IColorSchemes} from '../constants';
 
 const useColorScheme = (color: IColorSchemes) => {
   const [

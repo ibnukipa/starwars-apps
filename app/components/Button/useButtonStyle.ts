@@ -39,13 +39,13 @@ const useButtonStyle = (
     }
   }, [curColorScheme, variant]);
 
-  const sizeStyle = useMemo(() => {
+  const [sizeStyle, textSizeStyle] = useMemo(() => {
     switch (size) {
       case ButtonSize.SMALL:
-        return styles.small;
+        return [styles.small, styles.textSmall];
       case ButtonSize.REGULAR:
       default:
-        return styles.regular;
+        return [styles.regular, styles.text];
     }
   }, [size]);
 
@@ -92,6 +92,7 @@ const useButtonStyle = (
     bgStyle,
     pressedBgStyle,
     sizeStyle,
+    textSizeStyle,
   };
 };
 
