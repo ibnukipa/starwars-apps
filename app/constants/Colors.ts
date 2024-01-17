@@ -6,9 +6,7 @@ const Colors = {
   neutralPlaceholderText: '#AAABAD',
   neutralDisabledText: '#AAABAD',
   neutralBorder: '#E3E3E4',
-  neutralDisabledBackground: '#E3E3E4',
   neutralContainer: '#F3F5F6',
-  neutralSecondaryBackground: '#F3F5F6',
   neutralWhite: '#FFF',
 
   grayPlus2: '#222223',
@@ -38,6 +36,13 @@ const Colors = {
   victoriaBlueMin1: '#7AA4CA',
   victoriaBlueMin2: '#B6CDE2',
   victoriaBlueMin3: '#DBE6F1',
+
+  crimsonRedPlus2: '#8A1A38',
+  crimsonRedPlus1: '#C61F4D',
+  crimsonRed: '#EE255C',
+  crimsonRedMin1: '#F46E92',
+  crimsonRedMin2: '#F9B6C9',
+  crimsonRedMin3: '#FDE9EF',
 };
 
 export const ColorSchemes = {
@@ -45,6 +50,7 @@ export const ColorSchemes = {
   gray: 'gray',
   rustySand: 'rustySand',
   victoriaBlue: 'victoriaBlue',
+  crimsonRed: 'crimsonRed',
 };
 
 export const ColorSchemeGradients = {
