@@ -6,6 +6,7 @@ import {
   View,
   ViewProps,
 } from 'react-native';
+
 import {Colors, IColorSchemes} from '../../constants';
 import styles from './styles.ts';
 import {Text} from '../Text';
