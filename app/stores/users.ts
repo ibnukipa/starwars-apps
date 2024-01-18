@@ -9,6 +9,8 @@ export interface User {
   password: string;
   jobTitle?: string;
   lastLocation?: string;
+  nameAlias: string | undefined;
+  avatar: string | undefined;
 }
 
 interface UserState {

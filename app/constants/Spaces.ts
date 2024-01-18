@@ -1,6 +1,7 @@
 import {isIOS} from '../utils';
 
 const Spaces = {
+  xTiny: 2,
   tiny: 8,
   small: 12,
   regular: 16,

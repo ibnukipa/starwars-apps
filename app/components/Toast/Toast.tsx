@@ -14,7 +14,7 @@ import {
   ViewProps,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {IColorSchemes, Radii, Spaces} from '../../constants';
+import {Colors, IColorSchemes, Radii, Spaces} from '../../constants';
 import {isIOS} from '../../utils';
 import {Text} from '../Text';
 import {useColorScheme} from '../../hooks';
@@ -49,7 +49,9 @@ const Toast = forwardRef<ToastRef, ToastProps>((props, ref) => {
   const disableToClose = useRef(false);
 
   const {title, message, colorScheme} = option;
-  const {mainColorKey, min3Color} = useColorScheme(colorScheme || 'gray');
+  const {plus1ColorKey, min3Color, plus1Color} = useColorScheme(
+    colorScheme || 'gray',
+  );
   const bottom = 0;
   const popAnim = useRef(new Animated.Value(bottom)).current;
   const resetTimeout = useRef<any>(null);
@@ -123,13 +125,17 @@ const Toast = forwardRef<ToastRef, ToastProps>((props, ref) => {
       keyboardVerticalOffset={Spaces.regular}
       behavior={isIOS ? 'padding' : undefined}>
       {!option.message ? null : (
-        <View style={[styles.messageContainer, {backgroundColor: min3Color}]}>
+        <View
+          style={[
+            styles.messageContainer,
+            {backgroundColor: min3Color, borderColor: plus1Color},
+          ]}>
           {option.title && (
-            <Text fontWeight={'extraBold'} color={mainColorKey}>
+            <Text fontWeight={'extraBold'} color={plus1ColorKey}>
               {title}
             </Text>
           )}
-          <Text fontWeight={'bold'} color={mainColorKey}>
+          <Text fontWeight={'bold'} color={plus1ColorKey}>
             {message}
           </Text>
         </View>
@@ -146,12 +152,23 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    paddingHorizontal: Spaces.regular,
+    marginHorizontal: Spaces.regular,
+    shadowColor: Colors.neutralPlaceholderText,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4.65,
+
+    elevation: 8,
+    backgroundColor: Colors.neutralWhite,
+    borderRadius: Radii.medium,
   },
   messageContainer: {
     padding: Spaces.small,
     borderRadius: Radii.medium,
-    marginTop: Spaces.regular,
+    borderWidth: 1,
   },
 });
 

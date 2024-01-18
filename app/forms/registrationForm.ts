@@ -1,4 +1,5 @@
 import {User} from '../stores';
+import {getNameAlias} from '../utils';
 
 export type RegistrationForm = {
   confirmPassword: string;
@@ -12,7 +13,8 @@ export type RegistrationFormActions =
   | 'setLastName'
   | 'setPassword'
   | 'setConfirmPassword'
-  | 'setJobTitle';
+  | 'setJobTitle'
+  | 'setAvatar';
 
 const validateForm = (_values: RegistrationForm): boolean => {
   // TODO crate validation for each fields
@@ -47,6 +49,9 @@ export const registrationFormReducer = (
     case 'setJobTitle':
       newState.jobTitle = action.value;
       break;
+    case 'setAvatar':
+      newState.avatar = action.value;
+      break;
   }
 
   newState.isEmpty =
@@ -55,8 +60,10 @@ export const registrationFormReducer = (
     !newState.lastName &&
     !newState.password &&
     !newState.confirmPassword &&
-    !newState.jobTitle;
+    !newState.jobTitle &&
+    !newState.avatar;
   newState.isValid = validateForm(newState);
+  newState.nameAlias = getNameAlias(newState.firstName, newState.lastName);
   return newState;
 };
 
@@ -69,4 +76,6 @@ export const registrationFormInitialValues: RegistrationForm = {
   confirmPassword: '',
   isValid: false,
   isEmpty: true,
+  nameAlias: undefined,
+  avatar: undefined,
 };

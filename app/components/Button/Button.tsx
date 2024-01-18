@@ -21,6 +21,7 @@ export enum ButtonVariant {
 export enum ButtonSize {
   REGULAR,
   SMALL,
+  TINY,
 }
 
 export interface ButtonProps extends ViewProps {
@@ -74,7 +75,14 @@ const Button: React.FC<ButtonProps> = ({
     }
 
     return children;
-  }, [children, childrenColor, childrenPressedColor, isLoading, isPressing]);
+  }, [
+    children,
+    childrenColor,
+    childrenPressedColor,
+    isLoading,
+    isPressing,
+    textSizeStyle,
+  ]);
 
   return (
     <View

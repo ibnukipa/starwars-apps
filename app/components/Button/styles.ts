@@ -20,6 +20,10 @@ const styles = StyleSheet.create({
     minHeight: Heights.smallButton,
     paddingHorizontal: Spaces.regular,
   },
+  tiny: {
+    minHeight: Heights.tinyButton,
+    paddingHorizontal: Spaces.regular,
+  },
   text: {
     alignSelf: 'center',
     textAlign: 'center',
@@ -29,6 +33,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     fontSize: FontSizes.medium,
+  },
+  textTiny: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: FontSizes.small,
   },
 });
 

@@ -16,6 +16,7 @@ export enum IconSize {
   MEDIUM,
   LARGE,
   HUGE,
+  GIGANTIC,
 }
 
 export interface IconProps extends ImageProps {
@@ -23,6 +24,8 @@ export interface IconProps extends ImageProps {
   color?: IColors;
   size?: IconSize;
   onPress?: PressableProps['onPress'];
+  wrapperStyle?: PressableProps['style'];
+  isDisabled?: boolean;
 }
 
 const Icon: React.FC<IconProps> = ({
@@ -31,6 +34,8 @@ const Icon: React.FC<IconProps> = ({
   name,
   style,
   onPress,
+  wrapperStyle,
+  isDisabled,
   ...props
 }) => {
   const singularSource = useMemo(() => {
@@ -55,6 +60,8 @@ const Icon: React.FC<IconProps> = ({
         return styles.large;
       case IconSize.HUGE:
         return styles.huge;
+      case IconSize.GIGANTIC:
+        return styles.gigantic;
       case IconSize.REGULAR:
       default:
         return styles.regular;
@@ -66,7 +73,7 @@ const Icon: React.FC<IconProps> = ({
   }
 
   return (
-    <Pressable onPress={onPress}>
+    <Pressable disabled={isDisabled} onPress={onPress} style={wrapperStyle}>
       <Image
         style={[style, tintStyle, sizeStyle]}
         {...props}

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   tiny: {
@@ -24,6 +24,10 @@ const styles = StyleSheet.create({
   huge: {
     width: 42,
     height: 42,
+  },
+  gigantic: {
+    width: 72,
+    height: 72,
   },
 });
 

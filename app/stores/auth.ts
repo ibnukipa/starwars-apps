@@ -83,6 +83,8 @@ const useAuthStore = create(
         firstName: signUpForm.firstName,
         lastName: signUpForm.lastName,
         password: signUpForm.password,
+        nameAlias: signUpForm.nameAlias,
+        avatar: signUpForm.avatar,
       });
 
       // sign-up side effect
