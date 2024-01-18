@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {StyleSheet, View, StatusBar} from 'react-native';
+import {StyleSheet, View, StatusBar, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StackScreenProps} from '@react-navigation/stack';
 
@@ -8,14 +8,14 @@ import {
   ButtonVariant,
   Text,
   showToast,
-  KeyboardAvoidingView,
   InputText,
+  KeyboardAvoidingView,
 } from '../components';
 import {BaseStyle} from '../styles/base.ts';
 import {RootStackParamList} from '../routes/types.ts';
 import {useAuthStore} from '../stores';
 import {Colors, Radii, Spaces} from '../constants';
-import {useForm, useKeyboardAppearance} from '../hooks';
+import {useForm} from '../hooks';
 import {
   loginFormReducer,
   loginFormInitialValues,
@@ -34,8 +34,6 @@ const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
     loginFormReducer,
     loginFormInitialValues,
   );
-
-  const isKeyboardShowed = useKeyboardAppearance();
 
   useEffect(() => {
     if (errorMessage) {
@@ -56,18 +54,15 @@ const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
   }, [navigation]);
 
   return (
-    <SafeAreaView style={BaseStyle.container}>
+    <SafeAreaView edges={['left', 'right']} style={BaseStyle.container}>
       <StatusBar
         barStyle={'dark-content'}
         backgroundColor={Colors.neutralWhite}
       />
-      <KeyboardAvoidingView
-        style={[
-          BaseStyle.pad,
-          BaseStyle.keyboardAvoidingContainer,
-          styles.container,
-        ]}>
-        {!isKeyboardShowed && (
+      <KeyboardAvoidingView style={BaseStyle.flex}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[BaseStyle.pad, styles.contentContainer]}>
           <View style={styles.titleContainer}>
             <Text
               fontWeight={'extraBold'}
@@ -81,47 +76,47 @@ const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
               Communication Apps
             </Text>
           </View>
-        )}
-        <View style={styles.formContainer}>
-          <InputText
-            onChangeText={formSetValue('setEmail')}
-            onFocus={resetErrorMessage}
-            placeholderTextColor={Colors.neutralPlaceholderText}
-            placeholder={'Your e-mail address'}
-          />
-          <InputText
-            onChangeText={formSetValue('setPassword')}
-            onFocus={resetErrorMessage}
-            placeholder={'Password'}
-            secureTextEntry
-          />
-          <Button
-            isDisabled={!formState.email || !formState.password}
-            onPress={signInPress}
-            style={BaseStyle.space}
-            variant={ButtonVariant.PRIMARY}>
-            Login
-          </Button>
-          <Button
-            onPress={signUpPress}
-            style={BaseStyle.space}
-            variant={ButtonVariant.SECONDARY}>
-            Create a new account
-          </Button>
-        </View>
+          <View style={styles.formContainer}>
+            <InputText
+              onChangeText={formSetValue('setEmail')}
+              onFocus={resetErrorMessage}
+              placeholderTextColor={Colors.neutralPlaceholderText}
+              placeholder={'Your e-mail address'}
+            />
+            <InputText
+              onChangeText={formSetValue('setPassword')}
+              onFocus={resetErrorMessage}
+              placeholder={'Password'}
+              secureTextEntry
+            />
+            <Button
+              isDisabled={!formState.email || !formState.password}
+              onPress={signInPress}
+              style={BaseStyle.space}
+              variant={ButtonVariant.PRIMARY}>
+              Login
+            </Button>
+            <Button
+              onPress={signUpPress}
+              style={BaseStyle.space}
+              variant={ButtonVariant.SECONDARY}>
+              Create a new account
+            </Button>
+          </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
+  contentContainer: {
+    paddingTop: '40%',
+    paddingBottom: Spaces.presentationModal,
   },
   titleContainer: {
-    position: 'absolute',
     alignSelf: 'center',
-    top: '5%',
+    marginBottom: Spaces.large,
   },
   formContainer: {
     padding: Spaces.regular,

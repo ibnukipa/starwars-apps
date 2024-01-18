@@ -1,13 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {Radii, Colors, FontSizes, Heights, Spaces} from '../constants';
+import {Colors, FontSizes, Spaces} from '../constants';
 
 export const BaseStyle = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-  },
-  keyboardAvoidingContainer: {
-    flex: 1,
   },
   flex: {
     flex: 1,
