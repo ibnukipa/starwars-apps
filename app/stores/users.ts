@@ -16,33 +16,39 @@ interface UserState {
 }
 
 interface UserActions {
-  register: (user: User) => void;
-  getByEmail: (email: User['email']) => User | null;
-  setLastLocation: (
+  add: (user: User) => void;
+  verifyPassword: (
     email: User['email'],
-    lastLocation: User['lastLocation'],
-  ) => void;
+    password: User['password'],
+  ) => User | null;
 }
 
 const useUserStore = create(
   immer<UserState & UserActions>((setState, getState) => ({
     users: {},
-    register: user => {
+    add: user => {
       setState(state => {
+        user.email = user.email.toLowerCase();
+
         // TODO encrypt the password
         state.users[user.email] = user;
         // TODO add lastLocation
+
         return state;
       });
     },
-    getByEmail: email => {
-      return getState().users[email];
-    },
-    setLastLocation: (email, lastLocation) => {
-      setState(state => {
-        state.users[email].lastLocation = lastLocation;
-        return state;
-      });
+    verifyPassword: (email, password) => {
+      email = email.toLowerCase();
+
+      const user = getState().users[email];
+
+      // TODO decrypt the password
+      if (!user || password !== user.password) {
+        return null;
+      } else {
+        // TODO add lastLocation for in-memory
+        return user;
+      }
     },
   })),
 );

@@ -43,6 +43,13 @@ const Colors = {
   crimsonRedMin1: '#F46E92',
   crimsonRedMin2: '#F9B6C9',
   crimsonRedMin3: '#FDE9EF',
+
+  jadeGreenPlus2: '#236057',
+  jadeGreenPlus1: '#2F7F74',
+  jadeGreen: '#46BFAE',
+  jadeGreenMin1: '#84D4C9',
+  jadeGreenMin2: '#C1EAE4',
+  jadeGreenMin3: '#DAF2EF',
 };
 
 export const ColorSchemes = {
@@ -51,6 +58,7 @@ export const ColorSchemes = {
   rustySand: 'rustySand',
   victoriaBlue: 'victoriaBlue',
   crimsonRed: 'crimsonRed',
+  jadeGreen: 'jadeGreen',
 };
 
 export const ColorSchemeGradients = {

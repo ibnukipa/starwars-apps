@@ -1,4 +1,4 @@
-import React, {useCallback, useId} from 'react';
+import React, {useCallback} from 'react';
 import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -10,12 +10,13 @@ import {
   InputText,
   InputTextSize,
   KeyboardAvoidingView,
+  showToast,
   Text,
 } from '../components';
 import {BaseStyle} from '../styles/base.ts';
 import {RootStackParamList} from '../routes/types.ts';
 import {Colors, Spaces} from '../constants';
-import {useAuthStore, useUserStore} from '../stores';
+import {useAuthStore} from '../stores';
 import {
   RegistrationForm,
   RegistrationFormActions,
@@ -27,24 +28,17 @@ import {useForm} from '../hooks';
 const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
   navigation,
 }) => {
-  const register = useUserStore(state => state.register);
-  const registrationErrorMessage = useAuthStore(
-    state => state.registrationErrorMessage,
-  );
-  const resetRegistrationErrorMessage = useAuthStore(
-    state => state.resetRegistrationErrorMessage,
-  );
+  const signUp = useAuthStore(state => state.signUp);
 
-  const tempId = useId();
   const [formState, formSetValue] = useForm<
     RegistrationForm,
     RegistrationFormActions
   >(registrationFormReducer, registrationFormInitialValues);
 
   const registerPress = useCallback(() => {
-    console.log(tempId);
-    console.log(formState);
-  }, [formState, tempId]);
+    const isSuccess = signUp(formState);
+    if (isSuccess) navigation.goBack();
+  }, [formState, signUp, navigation]);
 
   return (
     <SafeAreaView edges={['left', 'right']} style={BaseStyle.container}>
@@ -74,6 +68,7 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
           />
         </View>
         <ScrollView
+          keyboardShouldPersistTaps={'handled'}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[BaseStyle.pad, styles.contentContainer]}>
           <SafeAreaView edges={['bottom']}>
@@ -81,7 +76,6 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
               size={InputTextSize.SMALL}
               label={'Email'}
               onChangeText={formSetValue('setEmail')}
-              onFocus={resetRegistrationErrorMessage}
               placeholder={'john.doe@gmail.com'}
               autoCapitalize={'none'}
               autoCorrect={false}
@@ -91,14 +85,12 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
               size={InputTextSize.SMALL}
               label={'First name'}
               onChangeText={formSetValue('setFirstName')}
-              onFocus={resetRegistrationErrorMessage}
               placeholder={'John'}
             />
             <InputText
               size={InputTextSize.SMALL}
               label={'Last name'}
               onChangeText={formSetValue('setLastName')}
-              onFocus={resetRegistrationErrorMessage}
               placeholder={'Doe'}
             />
             <View style={BaseStyle.divider} />
@@ -106,7 +98,6 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
               size={InputTextSize.SMALL}
               label={'Password'}
               onChangeText={formSetValue('setPassword')}
-              onFocus={resetRegistrationErrorMessage}
               placeholder={'Password'}
               secureTextEntry
             />
@@ -114,7 +105,6 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
               size={InputTextSize.SMALL}
               label={'Confirm password'}
               onChangeText={formSetValue('setConfirmPassword')}
-              onFocus={resetRegistrationErrorMessage}
               placeholder={'Password'}
               secureTextEntry
             />
@@ -123,10 +113,12 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
               size={InputTextSize.SMALL}
               label={'Job Title'}
               onChangeText={formSetValue('setJobTitle')}
-              onFocus={resetRegistrationErrorMessage}
               placeholder={'Jedi'}
             />
-            <Button onPress={registerPress} style={BaseStyle.space}>
+            <Button
+              isDisabled={!formState.isValid || formState.isEmpty}
+              onPress={registerPress}
+              style={BaseStyle.space}>
               Signup
             </Button>
           </SafeAreaView>

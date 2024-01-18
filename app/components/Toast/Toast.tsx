@@ -14,15 +14,17 @@ import {
   ViewProps,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Colors, Radii, Spaces} from '../../constants';
+import {IColorSchemes, Radii, Spaces} from '../../constants';
 import {isIOS} from '../../utils';
 import {Text} from '../Text';
+import {useColorScheme} from '../../hooks';
 
 export interface ToastProps extends ViewProps {}
 
 export interface ToastOptions {
   title?: string;
   message: string;
+  colorScheme?: IColorSchemes;
 }
 
 export interface ToastRef {
@@ -46,7 +48,8 @@ const Toast = forwardRef<ToastRef, ToastProps>((props, ref) => {
   const [option, setOption] = useState<ToastOptions>(INITIAL_OPTION);
   const disableToClose = useRef(false);
 
-  const {title, message} = option;
+  const {title, message, colorScheme} = option;
+  const {mainColorKey, min3Color} = useColorScheme(colorScheme || 'gray');
   const bottom = 0;
   const popAnim = useRef(new Animated.Value(bottom)).current;
   const resetTimeout = useRef<any>(null);
@@ -120,13 +123,15 @@ const Toast = forwardRef<ToastRef, ToastProps>((props, ref) => {
       keyboardVerticalOffset={Spaces.regular}
       behavior={isIOS ? 'padding' : undefined}>
       {!option.message ? null : (
-        <View style={styles.messageContainer}>
+        <View style={[styles.messageContainer, {backgroundColor: min3Color}]}>
           {option.title && (
-            <Text bold color={'crimsonRed'}>
+            <Text fontWeight={'extraBold'} color={mainColorKey}>
               {title}
             </Text>
           )}
-          <Text color={'crimsonRed'}>{message}</Text>
+          <Text fontWeight={'bold'} color={mainColorKey}>
+            {message}
+          </Text>
         </View>
       )}
     </AnimatedKeyboardAvoidingView>
@@ -147,7 +152,6 @@ const styles = StyleSheet.create({
     padding: Spaces.small,
     borderRadius: Radii.medium,
     marginTop: Spaces.regular,
-    backgroundColor: Colors.crimsonRedMin3,
   },
 });
 

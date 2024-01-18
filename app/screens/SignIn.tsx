@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, View, StatusBar, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StackScreenProps} from '@react-navigation/stack';
@@ -7,7 +7,6 @@ import {
   Button,
   ButtonVariant,
   Text,
-  showToast,
   InputText,
   KeyboardAvoidingView,
 } from '../components';
@@ -26,28 +25,16 @@ import {
 const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
   navigation,
 }) => {
-  const login = useAuthStore(state => state.login);
-  const errorMessage = useAuthStore(state => state.errorMessage);
-  const resetErrorMessage = useAuthStore(state => state.resetErrorMessage);
+  const signIn = useAuthStore(state => state.signIn);
 
   const [formState, formSetValue] = useForm<LoginForm, LoginFormActions>(
     loginFormReducer,
     loginFormInitialValues,
   );
 
-  useEffect(() => {
-    if (errorMessage) {
-      showToast({
-        message: errorMessage,
-      });
-    }
-  }, [errorMessage]);
-
   const signInPress = useCallback(() => {
-    if (formState.email && formState.password) {
-      login(formState.email, formState.password);
-    }
-  }, [login, formState]);
+    signIn(formState);
+  }, [signIn, formState]);
 
   const signUpPress = useCallback(() => {
     navigation.navigate('SignUp');
@@ -61,6 +48,7 @@ const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
       />
       <KeyboardAvoidingView style={BaseStyle.flex}>
         <ScrollView
+          keyboardShouldPersistTaps={'handled'}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[BaseStyle.pad, styles.contentContainer]}>
           <View style={styles.titleContainer}>
@@ -79,18 +67,18 @@ const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
           <View style={styles.formContainer}>
             <InputText
               onChangeText={formSetValue('setEmail')}
-              onFocus={resetErrorMessage}
               placeholderTextColor={Colors.neutralPlaceholderText}
               placeholder={'Your e-mail address'}
+              autoCapitalize={'none'}
+              autoCorrect={false}
             />
             <InputText
               onChangeText={formSetValue('setPassword')}
-              onFocus={resetErrorMessage}
               placeholder={'Password'}
               secureTextEntry
             />
             <Button
-              isDisabled={!formState.email || !formState.password}
+              isDisabled={!formState.isValid || formState.isEmpty}
               onPress={signInPress}
               style={BaseStyle.space}
               variant={ButtonVariant.PRIMARY}>

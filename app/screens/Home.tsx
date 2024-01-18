@@ -9,23 +9,19 @@ import {RootStackParamList} from '../routes/types.ts';
 import {useAuthStore} from '../stores';
 
 const Home: React.FC<StackScreenProps<RootStackParamList, 'Home'>> = () => {
-  const logoutPress = useAuthStore(state => state.logout);
+  const [signOutPress, user] = useAuthStore(state => ([state.signOut, state.user]));
 
   return (
-    <SafeAreaView
-      style={[BaseStyle.container, BaseStyle.pad, BaseStyle.centered]}>
+    <SafeAreaView style={[BaseStyle.container, BaseStyle.pad]}>
       <Text
-        fontWeight={'extraBold'}
+        fontWeight={'medium'}
         color={'citrusYellow'}
-        style={BaseStyle.title}>
-        StarWars: Home
-      </Text>
-      <Text color={'neutralSecondaryText'} style={BaseStyle.subTitle}>
-        Communication Apps
+        style={BaseStyle.heading3}>
+        Welcome, {user?.firstName}...
       </Text>
       <View>
         <Button
-          onPress={logoutPress}
+          onPress={signOutPress}
           style={BaseStyle.space}
           variant={ButtonVariant.TERTIARY}>
           Sign Out

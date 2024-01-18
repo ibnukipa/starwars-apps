@@ -2,6 +2,8 @@ import {User} from '../stores';
 
 export type RegistrationForm = {
   confirmPassword: string;
+  isValid: boolean;
+  isEmpty: boolean;
 } & User;
 
 export type RegistrationFormActions =
@@ -12,6 +14,11 @@ export type RegistrationFormActions =
   | 'setConfirmPassword'
   | 'setJobTitle';
 
+const validateForm = (_values: RegistrationForm): boolean => {
+  // TODO crate validation for each fields
+  return true;
+};
+
 export const registrationFormReducer = (
   state: RegistrationForm,
   action: {
@@ -19,39 +26,38 @@ export const registrationFormReducer = (
     value: string;
   },
 ): RegistrationForm => {
+  const newState: RegistrationForm = {...state};
   switch (action.type) {
     case 'setEmail': {
-      return {
-        ...state,
-        email: action.value,
-      };
+      newState.email = action.value;
+      break;
     }
     case 'setFirstName':
-      return {
-        ...state,
-        firstName: action.value,
-      };
+      newState.firstName = action.value;
+      break;
     case 'setLastName':
-      return {
-        ...state,
-        lastName: action.value,
-      };
+      newState.lastName = action.value;
+      break;
     case 'setPassword':
-      return {
-        ...state,
-        password: action.value,
-      };
+      newState.password = action.value;
+      break;
     case 'setConfirmPassword':
-      return {
-        ...state,
-        confirmPassword: action.value,
-      };
+      newState.confirmPassword = action.value;
+      break;
     case 'setJobTitle':
-      return {
-        ...state,
-        jobTitle: action.value,
-      };
+      newState.jobTitle = action.value;
+      break;
   }
+
+  newState.isEmpty =
+    !newState.email &&
+    !newState.firstName &&
+    !newState.lastName &&
+    !newState.password &&
+    !newState.confirmPassword &&
+    !newState.jobTitle;
+  newState.isValid = validateForm(newState);
+  return newState;
 };
 
 export const registrationFormInitialValues: RegistrationForm = {
@@ -61,4 +67,6 @@ export const registrationFormInitialValues: RegistrationForm = {
   lastName: '',
   password: '',
   confirmPassword: '',
+  isValid: false,
+  isEmpty: true,
 };
