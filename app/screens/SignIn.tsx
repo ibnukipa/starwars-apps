@@ -25,7 +25,10 @@ import {
 const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
   navigation,
 }) => {
-  const signIn = useAuthStore(state => state.signIn);
+  const [signIn, isSignInLoading] = useAuthStore(state => [
+    state.signIn,
+    state.isSignInLoading,
+  ]);
 
   const [formState, formSetValue] = useForm<LoginForm, LoginFormActions>(
     loginFormReducer,
@@ -66,6 +69,7 @@ const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
           </View>
           <View style={styles.formContainer}>
             <InputText
+              isDisabled={isSignInLoading}
               onChangeText={formSetValue('setEmail')}
               placeholderTextColor={Colors.neutralPlaceholderText}
               placeholder={'Your e-mail address'}
@@ -73,11 +77,13 @@ const SignIn: React.FC<StackScreenProps<RootStackParamList, 'SignIn'>> = ({
               autoCorrect={false}
             />
             <InputText
+              isDisabled={isSignInLoading}
               onChangeText={formSetValue('setPassword')}
               placeholder={'Password'}
               secureTextEntry
             />
             <Button
+              isLoading={isSignInLoading}
               isDisabled={!formState.isValid || formState.isEmpty}
               onPress={signInPress}
               style={BaseStyle.space}

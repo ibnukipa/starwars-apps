@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     height: Heights.input,
     borderWidth: 1,
   },
+  textInputContainerDisabled: {
+    backgroundColor: Colors.neutralContainer,
+  },
   textInputSmallContainer: {
     justifyContent: 'center',
     borderRadius: Radii.regular,

@@ -32,7 +32,10 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
   navigation,
 }) => {
   const avatarPickerOptionRef = useRef<BottomSheet>(null);
-  const signUp = useAuthStore(state => state.signUp);
+  const [signUp, isSignUpLoading] = useAuthStore(state => [
+    state.signUp,
+    state.isSignUpLoading,
+  ]);
 
   const [formState, formSetValue] = useForm<
     RegistrationForm,
@@ -55,10 +58,11 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
   }, []);
 
   const registerPress = useCallback(() => {
-    const isSuccess = signUp(formState);
-    if (isSuccess) {
-      navigation.goBack();
-    }
+    signUp(formState).then(isSuccess => {
+      if (isSuccess) {
+        navigation.goBack();
+      }
+    });
   }, [formState, signUp, navigation]);
 
   return (
@@ -95,12 +99,14 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
           <SafeAreaView edges={['bottom']}>
             <View style={[BaseStyle.centered, styles.avatarContainer]}>
               <Avatar
+                isDisabled={isSignUpLoading}
                 uri={formState.avatar}
                 onEditPress={avatarPickerOptionPress}
                 placeholder={formState.nameAlias}
               />
             </View>
             <InputText
+              isDisabled={isSignUpLoading}
               size={InputTextSize.SMALL}
               label={'Email'}
               onChangeText={formSetValue('setEmail')}
@@ -110,12 +116,14 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
             />
             <View style={BaseStyle.divider} />
             <InputText
+              isDisabled={isSignUpLoading}
               size={InputTextSize.SMALL}
               label={'First name'}
               onChangeText={formSetValue('setFirstName')}
               placeholder={'John'}
             />
             <InputText
+              isDisabled={isSignUpLoading}
               size={InputTextSize.SMALL}
               label={'Last name'}
               onChangeText={formSetValue('setLastName')}
@@ -123,6 +131,7 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
             />
             <View style={BaseStyle.divider} />
             <InputText
+              isDisabled={isSignUpLoading}
               size={InputTextSize.SMALL}
               label={'Password'}
               onChangeText={formSetValue('setPassword')}
@@ -130,6 +139,7 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
               secureTextEntry
             />
             <InputText
+              isDisabled={isSignUpLoading}
               size={InputTextSize.SMALL}
               label={'Confirm password'}
               onChangeText={formSetValue('setConfirmPassword')}
@@ -138,12 +148,14 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
             />
             <View style={BaseStyle.divider} />
             <InputText
+              isDisabled={isSignUpLoading}
               size={InputTextSize.SMALL}
               label={'Job Title'}
               onChangeText={formSetValue('setJobTitle')}
               placeholder={'Jedi'}
             />
             <Button
+              isLoading={isSignUpLoading}
               isDisabled={!formState.isValid || formState.isEmpty}
               onPress={registerPress}
               style={BaseStyle.space}>

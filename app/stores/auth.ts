@@ -5,24 +5,32 @@ import {User} from './users.ts';
 import {useUserStore} from './index.ts';
 import {showToast} from '../components';
 import {RegistrationForm, LoginForm} from '../forms';
-import {generateUUID} from '../utils';
+import {fetchWithTimeout, generateUUID} from '../utils';
 
 interface AuthState {
   user: User | null;
   isLoggedIn: boolean;
+  isSignInLoading: boolean;
+  isSignUpLoading: boolean;
+  isSignOutLoading: boolean;
 }
 
 interface AuthActions {
   signIn: (signInForm: LoginForm) => void;
   signOut: () => void;
-  signUp: (signUpForm: RegistrationForm) => boolean;
+  signUp: (signUpForm: RegistrationForm) => Promise<boolean>;
 }
 
 const useAuthStore = create(
   immer<AuthState & AuthActions>(setState => ({
-    isLoggedIn: false,
     user: null,
-    signIn: signInForm => {
+    isLoggedIn: false,
+    isSignInLoading: false,
+    isSignUpLoading: false,
+    isSignOutLoading: false,
+    signIn: async signInForm => {
+      setState({isSignInLoading: true});
+
       // TODO change this check on form validation
       if (!signInForm.email || !signInForm.password) {
         showToast({
@@ -32,14 +40,26 @@ const useAuthStore = create(
         return;
       }
 
-      // TODO call non-existent API
-      // user = fetchSignIn()
+      // call non-existent API
+      const response = await fetchWithTimeout(
+        'https://localhost:8080/sign-in',
+        {
+          method: 'post',
+        },
+      );
 
-      // in-memory strategy
-      const {verifyPassword} = useUserStore.getState();
-      const user = verifyPassword(signInForm.email, signInForm.password);
+      let user: User | null = null;
+
+      if (!response || !response.ok) {
+        // in-memory strategy
+        const {verifyPassword} = useUserStore.getState();
+        user = verifyPassword(signInForm.email, signInForm.password);
+      } else {
+        // TODO: proceed the response object
+      }
 
       // sign-in side effect
+      setState({isSignInLoading: false});
       if (!user) {
         showToast({
           message: 'Email or password does not match',
@@ -54,7 +74,9 @@ const useAuthStore = create(
         });
       }
     },
-    signUp: signUpForm => {
+    signUp: async signUpForm => {
+      setState({isSignUpLoading: true});
+
       // TODO change these checks on form validation
       if (!signUpForm.email || !signUpForm.firstName || !signUpForm.password) {
         showToast({
@@ -71,23 +93,32 @@ const useAuthStore = create(
         return false;
       }
 
-      // TODO call non-existent API
-      // user = fetchSignUp()
-
-      // in-memory strategy
-      const uuid = generateUUID();
-      const addUser = useUserStore.getState().add;
-      addUser({
-        id: uuid,
-        email: signUpForm.email,
-        firstName: signUpForm.firstName,
-        lastName: signUpForm.lastName,
-        password: signUpForm.password,
-        nameAlias: signUpForm.nameAlias,
-        avatar: signUpForm.avatar,
-      });
+      // call non-existent API
+      const response = await fetchWithTimeout(
+        'https://localhost:8080/sign-up',
+        {
+          method: 'post',
+        },
+      );
+      if (!response || !response.ok) {
+        // in-memory strategy
+        const uuid = generateUUID();
+        const addUser = useUserStore.getState().add;
+        addUser({
+          id: uuid,
+          email: signUpForm.email,
+          firstName: signUpForm.firstName,
+          lastName: signUpForm.lastName,
+          password: signUpForm.password,
+          nameAlias: signUpForm.nameAlias,
+          avatar: signUpForm.avatar,
+        });
+      } else {
+        // TODO: proceed the response object
+      }
 
       // sign-up side effect
+      setState({isSignUpLoading: false});
       showToast({
         title: 'Success',
         message: `Registered new user with ${signUpForm.email}`,

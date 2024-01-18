@@ -14,11 +14,13 @@ export enum InputTextSize {
 export interface InputTextProps extends TextInputProps {
   size?: InputTextSize;
   label?: string;
+  isDisabled?: boolean;
 }
 
 const InputText: React.FC<InputTextProps> = ({
   size = InputTextSize.REGULAR,
   label,
+  isDisabled,
   ...props
 }) => {
   const [textInputContainerStyle, textInputStyle] = useMemo(() => {
@@ -39,6 +41,7 @@ const InputText: React.FC<InputTextProps> = ({
         BaseStyle.row,
         BaseStyle.spaceBetween,
         BaseStyle.verticalCentered,
+        isDisabled && styles.textInputContainerDisabled,
       ]}>
       {label && (
         <Text
@@ -51,6 +54,7 @@ const InputText: React.FC<InputTextProps> = ({
       <TextInput
         {...props}
         placeholderTextColor={Colors.neutralPlaceholderText}
+        editable={!isDisabled}
         style={[
           textInputStyle,
           BaseStyle.flex,

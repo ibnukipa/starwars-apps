@@ -16,6 +16,7 @@ export interface AvatarProps {
   onEditPress?: () => void;
   placeholder?: string;
   uri?: string;
+  isDisabled?: boolean;
 }
 
 const Avatar: React.FC<AvatarProps> = ({
@@ -23,6 +24,7 @@ const Avatar: React.FC<AvatarProps> = ({
   placeholder = 'JD',
   onEditPress,
   uri,
+  isDisabled,
 }) => {
   const [sizeStyle, iconSize] = useMemo(() => {
     switch (size) {
@@ -54,8 +56,9 @@ const Avatar: React.FC<AvatarProps> = ({
           </Text>
         )}
         <Icon
+          isDisabled={isDisabled}
           onPress={onEditPress}
-          color={'victoriaBlue'}
+          color={isDisabled ? 'gray' : 'victoriaBlue'}
           name={'galleryEdit'}
           size={iconSize}
           wrapperStyle={styles.avatarEdit}
