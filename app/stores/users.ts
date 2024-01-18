@@ -1,6 +1,9 @@
 import {create} from 'zustand';
 import {immer} from 'zustand/middleware/immer';
 
+import {People, searchPeopleApi} from '../apis';
+import {userSeed} from './seed';
+
 export interface User {
   id: string;
   email: string;
@@ -11,6 +14,7 @@ export interface User {
   lastLocation?: string;
   nameAlias: string | undefined;
   avatar: string | undefined;
+  startWarProfile: People | null;
 }
 
 interface UserState {
@@ -23,11 +27,12 @@ interface UserActions {
     email: User['email'],
     password: User['password'],
   ) => User | null;
+  fetchStarWarsPeopleByName: (name: string) => Promise<People | null>;
 }
 
 const useUserStore = create(
   immer<UserState & UserActions>((setState, getState) => ({
-    users: {},
+    users: userSeed,
     add: user => {
       setState(state => {
         user.email = user.email.toLowerCase();
@@ -51,6 +56,9 @@ const useUserStore = create(
         // TODO add lastLocation for in-memory
         return user;
       }
+    },
+    fetchStarWarsPeopleByName: async name => {
+      return searchPeopleApi(name);
     },
   })),
 );

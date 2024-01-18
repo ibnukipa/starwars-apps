@@ -55,14 +55,16 @@ const Avatar: React.FC<AvatarProps> = ({
             {placeholder}
           </Text>
         )}
-        <Icon
-          isDisabled={isDisabled}
-          onPress={onEditPress}
-          color={isDisabled ? 'gray' : 'victoriaBlue'}
-          name={'galleryEdit'}
-          size={iconSize}
-          wrapperStyle={styles.avatarEdit}
-        />
+        {onEditPress && (
+          <Icon
+            isDisabled={isDisabled}
+            onPress={onEditPress}
+            color={isDisabled ? 'gray' : 'victoriaBlue'}
+            name={'galleryEdit'}
+            size={iconSize}
+            wrapperStyle={styles.avatarEdit}
+          />
+        )}
       </View>
     </View>
   );

@@ -37,6 +37,7 @@ const useAuthStore = create(
           message: 'Please complete the sign-in form',
           colorScheme: 'citrusYellow',
         });
+        setState({isSignInLoading: true});
         return;
       }
 
@@ -83,6 +84,7 @@ const useAuthStore = create(
           message: 'Please complete the sign-up form',
           colorScheme: 'citrusYellow',
         });
+        setState({isSignUpLoading: true});
         return false;
       }
       if (signUpForm.password !== signUpForm.confirmPassword) {
@@ -90,6 +92,7 @@ const useAuthStore = create(
           message: 'Password does not match',
           colorScheme: 'crimsonRed',
         });
+        setState({isSignUpLoading: true});
         return false;
       }
 
@@ -103,7 +106,9 @@ const useAuthStore = create(
       if (!response || !response.ok) {
         // in-memory strategy
         const uuid = generateUUID();
-        const addUser = useUserStore.getState().add;
+        const {add: addUser, fetchStarWarsPeopleByName} =
+          useUserStore.getState();
+        const people = await fetchStarWarsPeopleByName(signUpForm.firstName);
         addUser({
           id: uuid,
           email: signUpForm.email,
@@ -112,6 +117,7 @@ const useAuthStore = create(
           password: signUpForm.password,
           nameAlias: signUpForm.nameAlias,
           avatar: signUpForm.avatar,
+          startWarProfile: people,
         });
       } else {
         // TODO: proceed the response object

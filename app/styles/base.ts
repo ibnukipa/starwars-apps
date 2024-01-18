@@ -61,6 +61,11 @@ export const BaseStyle = StyleSheet.create({
     backgroundColor: Colors.citrusYellowPlus1,
     width: '100%',
   },
+  dividerPlain: {
+    marginVertical: Spaces.tiny,
+    height: 1,
+    width: '100%',
+  },
   dividerVertical: {
     marginHorizontal: Spaces.tiny,
     backgroundColor: Colors.citrusYellowPlus1,
