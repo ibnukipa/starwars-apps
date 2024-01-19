@@ -4,36 +4,42 @@ import {BaseStyle} from '../../styles/base.ts';
 import {Icon, IconProps, IconSize} from '../Icon';
 import {Text} from '../Text';
 import styles from './styles.ts';
-import {IColorSchemes} from '../../constants';
+import {Colors, IColorSchemes} from '../../constants';
 import {useColorScheme} from '../../hooks';
 
 export interface CardProps {
-  label: string;
+  label?: string;
   icon?: IconProps['name'];
   colorScheme?: IColorSchemes;
   children?: React.ReactNode | undefined;
 }
 
-const Card: React.FC<CardProps> = ({
-  icon = 'camera',
-  colorScheme = 'citrusYellow',
-  label,
-  children,
-}) => {
-  const {plus2ColorKey, plus1ColorKey} = useColorScheme(colorScheme);
+const Card: React.FC<CardProps> = ({icon, colorScheme, label, children}) => {
+  const {plus2ColorKey, plus1ColorKey, min3Color} = useColorScheme(colorScheme);
+
   return (
-    <View style={styles.cardContainer}>
-      <View style={[BaseStyle.centered, styles.cardHeader]}>
-        <Icon
-          size={IconSize.HUGE}
-          wrapperStyle={styles.cardIcon}
-          color={plus2ColorKey}
-          name={icon}
-        />
-        <Text fontWeight={'semiBold'} color={plus1ColorKey}>
-          {label.toUpperCase()}
-        </Text>
-      </View>
+    <View
+      style={[
+        styles.cardContainer,
+        {backgroundColor: colorScheme ? min3Color : Colors.neutralWhite},
+      ]}>
+      {(label || icon) && (
+        <View style={[BaseStyle.centered, styles.cardHeader]}>
+          {icon && (
+            <Icon
+              size={IconSize.HUGE}
+              wrapperStyle={styles.cardIcon}
+              color={plus2ColorKey}
+              name={icon}
+            />
+          )}
+          {label && (
+            <Text fontWeight={'semiBold'} color={plus1ColorKey}>
+              {label.toUpperCase()}
+            </Text>
+          )}
+        </View>
+      )}
       {children}
     </View>
   );

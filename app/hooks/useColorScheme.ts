@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 import {Colors, IColors, IColorSchemes} from '../constants';
 
-const useColorScheme = (color: IColorSchemes) => {
+const useColorScheme = (color?: IColorSchemes) => {
   const [
     min3ColorKey,
     min2ColorKey,
@@ -9,7 +9,12 @@ const useColorScheme = (color: IColorSchemes) => {
     mainColorKey,
     plus1ColorKey,
     plus2ColorKey,
-  ] = useMemo<[IColors, IColors, IColors, IColors, IColors, IColors]>(() => {
+  ] = useMemo<
+    [IColors, IColors, IColors, IColors, IColors, IColors] | []
+  >(() => {
+    if (!color) {
+      return [];
+    }
     return [
       `${color}Min3`,
       `${color}Min2`,
@@ -21,7 +26,17 @@ const useColorScheme = (color: IColorSchemes) => {
   }, [color]);
 
   const [min3Color, min2Color, min1Color, mainColor, plus1Color, plus2Color] =
-    useMemo<[string, string, string, string, string, string]>(() => {
+    useMemo<[string, string, string, string, string, string] | []>(() => {
+      if (
+        !min3ColorKey ||
+        !min2ColorKey ||
+        !min1ColorKey ||
+        !mainColorKey ||
+        !plus1ColorKey ||
+        !plus2ColorKey
+      ) {
+        return [];
+      }
       return [
         Colors[min3ColorKey],
         Colors[min2ColorKey],

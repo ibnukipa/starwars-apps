@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
-import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
+import {StatusBar, StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 
 import {
   Avatar,
@@ -11,16 +12,15 @@ import {
   Card,
   CardContent,
   CardContentProps,
-  Item,
   Text,
 } from '../components';
 import {BaseStyle} from '../styles/base.ts';
-import {StackScreenProps} from '@react-navigation/stack';
-import {RootStackParamList} from '../routes/types.ts';
+import {HomeTabParamList} from '../routes/types.ts';
 import {useAuthStore} from '../stores';
-import {Colors, FontSizes, Spaces} from '../constants';
+import {Colors, FontSizes} from '../constants';
+import {getAbbreviateNumber} from '../utils';
 
-const Home: React.FC<StackScreenProps<RootStackParamList, 'Home'>> = () => {
+const Home: React.FC<BottomTabScreenProps<HomeTabParamList, 'Home'>> = () => {
   const [signOutPress, user] = useAuthStore(state => [
     state.signOut,
     state.user,
@@ -30,99 +30,133 @@ const Home: React.FC<StackScreenProps<RootStackParamList, 'Home'>> = () => {
     return [
       [
         {
+          icon: 'arrowUpRound',
           label: 'Height',
           value: user?.startWarProfile?.height,
-          isValueString: false,
+          isCard: true,
+          colorScheme: 'citrusYellow',
         },
         {
+          icon: 'masks',
           label: 'Skin',
           value: user?.startWarProfile?.skin_color.split(',')[0],
-          isValueString: true,
+          isCard: true,
+          colorScheme: 'citrusYellow',
         },
         {
+          icon: 'dumbbell',
           label: 'Mass',
-          value: user?.startWarProfile?.mass,
-          isValueString: false,
+          value: getAbbreviateNumber(user?.startWarProfile?.mass),
+          isCard: true,
+          colorScheme: 'citrusYellow',
         },
       ],
       [
         {
+          icon: 'eye',
           label: 'Eye',
           value: user?.startWarProfile?.eye_color.split(',')[0],
-          isValueString: true,
+          isCard: true,
+          colorScheme: 'citrusYellow',
         },
         {
+          icon: 'accessibility',
           label: 'Gender',
           value: user?.startWarProfile?.gender,
-          isValueString: true,
+          isCard: true,
+          colorScheme: 'citrusYellow',
         },
         {
+          icon: 'blackHole',
           label: 'Hair',
           value: user?.startWarProfile?.hair_color.split(',')[0],
-          isValueString: true,
+          isCard: true,
+          colorScheme: 'citrusYellow',
+        },
+      ],
+      [
+        {
+          icon: 'mailbox',
+          label: 'Email',
+          value: user?.email,
+          isCard: false,
+        },
+      ],
+      [
+        {
+          icon: 'medal',
+          label: 'Birth Year',
+          value: user?.startWarProfile?.birth_year,
+          isCard: false,
+        },
+      ],
+      [
+        {
+          icon: 'suitcase',
+          label: 'Job Title',
+          value: user?.jobTitle,
+          isCard: false,
         },
       ],
     ];
   }, [user]);
 
   return (
-    <SafeAreaView edges={['left', 'right']} style={[BaseStyle.container]}>
+    <SafeAreaView
+      edges={['left', 'right']}
+      style={[BaseStyle.containerSecondary]}>
       <StatusBar
         barStyle={'dark-content'}
         backgroundColor={Colors.neutralWhite}
       />
-      <ScrollView
-        keyboardShouldPersistTaps={'handled'}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[BaseStyle.pad]}>
-        <SafeAreaView edges={['top', 'bottom']}>
-          <View style={[BaseStyle.centered]}>
-            <Avatar
-              size={AvatarSize.LARGE}
-              uri={user?.avatar}
-              placeholder={user?.nameAlias}
-            />
-            <Text fontWeight={'semiBold'} style={styles.name}>
+      <SafeAreaView edges={['top', 'bottom']} style={BaseStyle.pad}>
+        <View
+          style={[
+            BaseStyle.row,
+            BaseStyle.verticalCentered,
+            BaseStyle.spaceBetween,
+          ]}>
+          <View style={BaseStyle.flex}>
+            <Text color={'neutralSecondaryText'} style={styles.greeting}>
+              Hello, welcome back
+            </Text>
+            <Text
+              fontWeight={'bold'}
+              color={'citrusYellowPlus1'}
+              style={styles.name}>
               {user?.firstName}
               {user?.lastName ? ` ${user?.lastName}` : ''}
             </Text>
           </View>
-          <View style={BaseStyle.divider} />
-          <View style={BaseStyle.dividerPlain} />
-          <Item label={'Email'} value={user?.email} />
-          <Item
-            label={'Birth Year'}
-            value={user?.startWarProfile?.birth_year}
+          <Avatar
+            size={AvatarSize.SMALL}
+            uri={user?.avatar}
+            placeholder={user?.nameAlias}
           />
-          <Item label={'Job Title'} value={user?.jobTitle || '-'} />
-          <View style={BaseStyle.dividerPlain} />
-          <Card
-            label={'Appearance'}
-            icon={'meditation'}
-            colorScheme={'rustySand'}>
-            <CardContent contents={contents} colorScheme={'rustySand'} />
-          </Card>
-          <View style={BaseStyle.dividerPlain} />
-          <Button
-            variant={ButtonVariant.SECONDARY}
-            colorScheme={'crimsonRed'}
-            size={ButtonSize.SMALL}
-            onPress={signOutPress}>
-            Logout
-          </Button>
-        </SafeAreaView>
-      </ScrollView>
+        </View>
+        <View style={BaseStyle.dividerPlain} />
+        <Card>
+          <CardContent contents={contents} />
+        </Card>
+        <View style={BaseStyle.dividerPlain} />
+        <Button
+          variant={ButtonVariant.TERTIARY}
+          colorScheme={'crimsonRed'}
+          size={ButtonSize.SMALL}
+          onPress={signOutPress}>
+          Logout
+        </Button>
+      </SafeAreaView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  name: {
-    fontSize: FontSizes.xLarge,
-    marginTop: Spaces.tiny,
+  greeting: {
+    fontSize: FontSizes.medium,
   },
-  jobTitle: {
-    fontSize: FontSizes.xMedium,
+  name: {
+    fontSize: FontSizes.large,
   },
 });
 

@@ -21,7 +21,7 @@ const Colors = {
   citrusYellow: '#D6BF78',
   citrusYellowMin1: '#E8DCB5',
   citrusYellowMin2: '#F3ECD7',
-  citrusYellowMin3: '#F9F5EB',
+  citrusYellowMin3: '#FBF9F2',
 
   rustySandPlus2: '#6C4F3B',
   rustySandPlus1: '#A97A5C',

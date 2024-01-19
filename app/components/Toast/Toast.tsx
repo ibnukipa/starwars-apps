@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 4.65,
-
     elevation: 8,
     backgroundColor: Colors.neutralWhite,
     borderRadius: Radii.medium,

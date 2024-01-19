@@ -1,12 +1,9 @@
 import {StyleSheet} from 'react-native';
-import {Colors, FontSizes, Radii, Spaces} from '../../constants';
+import {FontSizes, Radii, Spaces} from '../../constants';
 
 const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: Colors.rustySandMin3,
-    borderRadius: Radii.medium,
-    borderWidth: 1,
-    borderColor: Colors.neutralBorder,
+    borderRadius: Radii.regular,
     padding: Spaces.tiny,
   },
   cardHeader: {
@@ -21,14 +18,14 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    backgroundColor: Colors.rustySandMin2,
     marginHorizontal: Spaces.tiny,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: Spaces.small,
     borderRadius: Radii.regular,
     borderWidth: 1,
-    borderColor: Colors.rustySandPlus1,
+    overflow: 'hidden',
+  },
+  cardSingle: {
+    paddingVertical: Spaces.tiny,
   },
   cardValue: {
     fontSize: FontSizes.xLarge,
@@ -36,8 +33,24 @@ const styles = StyleSheet.create({
   cardValueString: {
     fontSize: FontSizes.large,
   },
+  cardValueItem: {
+    fontSize: FontSizes.medium,
+  },
+  cardSingleLabel: {
+    marginLeft: Spaces.large,
+  },
   cardLabel: {
-    fontSize: FontSizes.small,
+    fontSize: FontSizes.xSmall,
+  },
+  iconBackground: {
+    position: 'absolute',
+  },
+  iconBackgroundCard: {
+    right: '-50%',
+  },
+  iconBackgroundCardSingle: {
+    marginLeft: Spaces.tiny,
+    transform: [{scaleX: -1}],
   },
 });
 

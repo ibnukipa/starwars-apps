@@ -3,45 +3,80 @@ import {BaseStyle} from '../../styles/base.ts';
 import {View} from 'react-native';
 import {Text} from '../Text';
 import styles from './styles.ts';
-import {IColorSchemes} from '../../constants';
+import {IColorSchemes, IIcons} from '../../constants';
 import {useColorScheme} from '../../hooks';
+import {Icon, IconSize} from '../Icon';
+
+type CardItemProps = {
+  value?: string;
+  label: string;
+  isCard?: boolean;
+  colorScheme?: IColorSchemes;
+  icon?: IIcons;
+};
 
 export interface CardContentProps {
-  contents: Array<
-    Array<{value?: string; label: string; isValueString: boolean}>
-  >;
-  colorScheme?: IColorSchemes;
+  contents: Array<Array<CardItemProps>>;
 }
 
-const CardContent: React.FC<CardContentProps> = ({
-  contents,
+const CardItem: React.FC<CardItemProps> = ({
+  value,
+  label,
   colorScheme = 'citrusYellow',
+  icon,
+  isCard,
 }) => {
-  const {plus2ColorKey} = useColorScheme(colorScheme);
+  const {plus1ColorKey, plus2ColorKey, min1ColorKey, min3Color, min1Color} =
+    useColorScheme(colorScheme);
 
+  return (
+    <View
+      style={[
+        styles.card,
+        isCard && {borderColor: min1Color},
+        !isCard && {backgroundColor: min3Color, borderWidth: 0},
+        !isCard && BaseStyle.row,
+        !isCard && BaseStyle.verticalCentered,
+        !isCard && BaseStyle.spaceBetween,
+        !isCard && styles.cardSingle,
+      ]}>
+      {icon && (
+        <Icon
+          wrapperStyle={[
+            BaseStyle.padTinyRight,
+            styles.iconBackground,
+            isCard && styles.iconBackgroundCard,
+            !isCard && styles.iconBackgroundCardSingle,
+          ]}
+          size={isCard ? IconSize.GIGANTIC : IconSize.LARGE}
+          color={min1ColorKey}
+          name={icon}
+        />
+      )}
+      <Text
+        color={plus1ColorKey}
+        fontWeight={'bold'}
+        style={[styles.cardLabel, !isCard && styles.cardSingleLabel]}>
+        {label.toUpperCase()}
+      </Text>
+      <Text
+        fontWeight={!isCard ? 'medium' : 'semiBold'}
+        color={plus2ColorKey}
+        style={[!isCard ? styles.cardValueItem : styles.cardValueString]}>
+        {value || '-'}
+      </Text>
+    </View>
+  );
+};
+
+const CardContent: React.FC<CardContentProps> = ({contents}) => {
   return (
     <>
       {contents.map((row, rowIndex) => {
         return (
           <View key={rowIndex} style={[BaseStyle.row, styles.cardContent]}>
             {row.map((item, index) => {
-              return (
-                <View key={`${rowIndex}-${index}`} style={styles.card}>
-                  <Text
-                    fontWeight={item.isValueString ? 'bold' : 'extraBold'}
-                    color={plus2ColorKey}
-                    style={
-                      item.isValueString
-                        ? styles.cardValueString
-                        : styles.cardValue
-                    }>
-                    {item.value || '-'}
-                  </Text>
-                  <Text style={styles.cardLabel}>
-                    {item.label.toUpperCase()}
-                  </Text>
-                </View>
-              );
+              return <CardItem key={`${rowIndex}-${index}`} {...item} />;
             })}
           </View>
         );

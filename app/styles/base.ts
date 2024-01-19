@@ -4,13 +4,20 @@ import {Colors, FontSizes, Spaces} from '../constants';
 export const BaseStyle = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: Colors.neutralWhite,
+  },
+  containerSecondary: {
+    flex: 1,
+    backgroundColor: Colors.neutralContainer,
   },
   flex: {
     flex: 1,
   },
   pad: {
     padding: Spaces.regular,
+  },
+  padTinyRight: {
+    marginRight: Spaces.tiny,
   },
   centered: {
     justifyContent: 'center',
