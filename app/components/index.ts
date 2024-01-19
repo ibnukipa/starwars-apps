@@ -8,3 +8,4 @@ export * from './Avatar';
 export * from './BottomSheet';
 export * from './Item';
 export * from './Card';
+export * from './TabBar';

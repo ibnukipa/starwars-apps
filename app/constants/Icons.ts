@@ -21,6 +21,8 @@ const Icons = {
   meditation: require('../assets/icons/meditation.png'),
   suitcase: require('../assets/icons/suitcase.png'),
   usersGroup: require('../assets/icons/users-group.png'),
+
+  logoOutline: require('../assets/logo_outline.png'),
 };
 
 export type IIcons = Leaves<typeof Icons>;

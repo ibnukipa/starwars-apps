@@ -3,7 +3,7 @@ import {FontSizes, Radii, Spaces} from '../../constants';
 
 const styles = StyleSheet.create({
   cardContainer: {
-    borderRadius: Radii.regular,
+    borderRadius: Radii.large,
     padding: Spaces.tiny,
   },
   cardHeader: {

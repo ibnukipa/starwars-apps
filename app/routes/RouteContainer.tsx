@@ -7,9 +7,10 @@ import {
 import {NavigationContainer} from '@react-navigation/native';
 import RNBootSplash from 'react-native-bootsplash';
 
-import {Home, SignIn, SignUp} from '../screens';
+import {SignIn, SignUp} from '../screens';
 import {RootStackParamList} from './types.ts';
 import {useAuthStore} from '../stores';
+import RouteHomeContainer from './RouteHomeContainer.tsx';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 const RootScreenOptions: StackNavigationOptions = {
@@ -49,8 +50,8 @@ const RouteContainer: React.FC = () => {
         {isLoggedIn ? (
           <>
             <RootStack.Screen
-              name={'Home'}
-              component={Home}
+              name={'HomeTab'}
+              component={RouteHomeContainer}
               options={ScreenSlideRightOptions}
             />
           </>

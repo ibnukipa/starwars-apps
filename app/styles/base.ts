@@ -16,6 +16,9 @@ export const BaseStyle = StyleSheet.create({
   pad: {
     padding: Spaces.regular,
   },
+  padTinyX: {
+    paddingHorizontal: Spaces.tiny,
+  },
   padTinyRight: {
     marginRight: Spaces.tiny,
   },

@@ -139,13 +139,24 @@ const Home: React.FC<BottomTabScreenProps<HomeTabParamList, 'Home'>> = () => {
           <CardContent contents={contents} />
         </Card>
         <View style={BaseStyle.dividerPlain} />
-        <Button
-          variant={ButtonVariant.TERTIARY}
-          colorScheme={'crimsonRed'}
-          size={ButtonSize.SMALL}
-          onPress={signOutPress}>
-          Logout
-        </Button>
+        <Card>
+          <View
+            style={[
+              BaseStyle.spaceBetween,
+              BaseStyle.padTinyX,
+              BaseStyle.row,
+              BaseStyle.verticalCentered,
+            ]}>
+            <Text>v1.0.0</Text>
+            <Button
+              variant={ButtonVariant.TERTIARY}
+              colorScheme={'crimsonRed'}
+              size={ButtonSize.TINY}
+              onPress={signOutPress}>
+              Logout
+            </Button>
+          </View>
+        </Card>
       </SafeAreaView>
     </SafeAreaView>
   );
