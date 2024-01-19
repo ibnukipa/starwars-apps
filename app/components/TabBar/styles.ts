@@ -8,10 +8,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.neutralWhite,
     borderTopEndRadius: Radii.large,
     borderTopStartRadius: Radii.large,
-    borderWidth: 1,
-    borderColor: Colors.neutralBorder,
     alignItems: 'center',
     paddingHorizontal: Spaces.regular,
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
   item: {
     padding: Spaces.regular,
@@ -20,8 +21,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     height: 50,
-    aspectRatio: 3840 / 2160,
-    tintColor: Colors.neutralSecondaryText,
+    aspectRatio: 1200 / 572,
+    tintColor: Colors.victoriaBlue,
   },
 });
 

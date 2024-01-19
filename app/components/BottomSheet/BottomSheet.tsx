@@ -5,7 +5,9 @@ import GBottomSheet, {
   BottomSheetBackdropProps,
 } from '@gorhom/bottom-sheet';
 
-export interface BottomSheetProps extends GBottomSheetProps {}
+export interface BottomSheetProps extends GBottomSheetProps {
+  isDisabledBackdrop?: boolean;
+}
 
 type BottomSheet = GBottomSheet;
 
@@ -25,12 +27,12 @@ const BottomSheet = forwardRef<BottomSheet, BottomSheetProps>((props, ref) => {
 
   return (
     <GBottomSheet
-      {...props}
       index={-1}
       ref={ref}
       enableDynamicSizing
       enablePanDownToClose
-      backdropComponent={renderBackdrop}
+      backdropComponent={props.isDisabledBackdrop ? undefined : renderBackdrop}
+      {...props}
     />
   );
 });

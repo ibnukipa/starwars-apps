@@ -26,7 +26,7 @@ const CardItem: React.FC<CardItemProps> = ({
   icon,
   isCard,
 }) => {
-  const {plus1ColorKey, plus2ColorKey, min1ColorKey, min3Color, min1Color} =
+  const {plus1ColorKey, plus2ColorKey, min1ColorKey, min4Color, min1Color} =
     useColorScheme(colorScheme);
 
   return (
@@ -34,7 +34,7 @@ const CardItem: React.FC<CardItemProps> = ({
       style={[
         styles.card,
         isCard && {borderColor: min1Color},
-        !isCard && {backgroundColor: min3Color, borderWidth: 0},
+        !isCard && {backgroundColor: min4Color, borderWidth: 0},
         !isCard && BaseStyle.row,
         !isCard && BaseStyle.verticalCentered,
         !isCard && BaseStyle.spaceBetween,

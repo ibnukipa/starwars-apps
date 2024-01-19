@@ -7,6 +7,7 @@ import styles from './styles.ts';
 import {Icon, IconSize} from '../Icon';
 import {IColors, Icons, IIcons} from '../../constants';
 import Text from '../Text/Text.tsx';
+import {BaseStyle} from '../../styles/base.ts';
 
 const TabBarItem: React.FC<
   BottomTabBarProps & {
@@ -107,7 +108,9 @@ const TabBar: React.FC<BottomTabBarProps> = ({
   ...props
 }) => {
   return (
-    <SafeAreaView edges={['left', 'right']} style={styles.container}>
+    <SafeAreaView
+      edges={['left', 'right']}
+      style={[BaseStyle.shadowFaceUp, styles.container]}>
       {state.routes.map((route, index) => {
         return (
           <TabBarItem

@@ -38,6 +38,9 @@ export const BaseStyle = StyleSheet.create({
   heading3: {
     fontSize: FontSizes.large,
   },
+  heading4: {
+    fontSize: FontSizes.medium,
+  },
   subTitle: {
     fontSize: FontSizes.large,
   },
@@ -63,6 +66,17 @@ export const BaseStyle = StyleSheet.create({
     paddingBottom: Spaces.small,
     borderBottomWidth: 1,
     borderColor: Colors.neutralBorder,
+  },
+  shadowFaceUp: {
+    borderColor: Colors.neutralBorder,
+    shadowColor: Colors.neutralText,
+    shadowOffset: {
+      width: 0,
+      height: 26,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.0,
+    elevation: 24,
   },
   // TODO create divider component
   divider: {

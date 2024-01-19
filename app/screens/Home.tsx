@@ -12,6 +12,7 @@ import {
   Card,
   CardContent,
   CardContentProps,
+  GroupModal,
   Text,
 } from '../components';
 import {BaseStyle} from '../styles/base.ts';
@@ -107,7 +108,7 @@ const Home: React.FC<BottomTabScreenProps<HomeTabParamList, 'Home'>> = () => {
       style={[BaseStyle.containerSecondary]}>
       <StatusBar
         barStyle={'dark-content'}
-        backgroundColor={Colors.neutralWhite}
+        backgroundColor={Colors.neutralContainer}
       />
       <SafeAreaView edges={['top', 'bottom']} style={BaseStyle.pad}>
         <View
@@ -149,7 +150,7 @@ const Home: React.FC<BottomTabScreenProps<HomeTabParamList, 'Home'>> = () => {
             ]}>
             <Text>v1.0.0</Text>
             <Button
-              variant={ButtonVariant.TERTIARY}
+              variant={ButtonVariant.PRIMARY}
               colorScheme={'crimsonRed'}
               size={ButtonSize.TINY}
               onPress={signOutPress}>
@@ -158,6 +159,7 @@ const Home: React.FC<BottomTabScreenProps<HomeTabParamList, 'Home'>> = () => {
           </View>
         </Card>
       </SafeAreaView>
+      <GroupModal />
     </SafeAreaView>
   );
 };

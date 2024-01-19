@@ -1,5 +1,4 @@
 import React, {useCallback} from 'react';
-import { View } from "react-native";
 import {
   BottomTabBarProps,
   BottomTabNavigationOptions,
@@ -12,6 +11,9 @@ import {TabBar} from '../components';
 const HomeTab = createBottomTabNavigator<HomeTabParamList>();
 const HomeTabScreenOptions: BottomTabNavigationOptions = {
   headerShown: false,
+  tabBarStyle: {
+    height: 118,
+  },
 };
 
 const RouteHomeContainer: React.FC = () => {
@@ -24,7 +26,7 @@ const RouteHomeContainer: React.FC = () => {
       screenOptions={HomeTabScreenOptions}
       tabBar={renderTabBar}>
       <HomeTab.Screen name={'Home'} component={Home} />
-      <HomeTab.Screen name={'Logo'} component={View} />
+      {/*<HomeTab.Screen name={'Logo'} component={View} />*/}
       <HomeTab.Screen name={'Notification'} component={Notification} />
     </HomeTab.Navigator>
   );

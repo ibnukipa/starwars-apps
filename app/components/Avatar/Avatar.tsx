@@ -4,6 +4,8 @@ import {Image, View} from 'react-native';
 import {Text} from '../Text';
 import {Icon, IconSize} from '../Icon';
 import styles from './styles.ts';
+import {IColorSchemes} from '../../constants';
+import {useColorScheme} from '../../hooks';
 
 export enum AvatarSize {
   REGULAR,
@@ -17,6 +19,7 @@ export interface AvatarProps {
   placeholder?: string;
   uri?: string;
   isDisabled?: boolean;
+  colorScheme?: IColorSchemes;
 }
 
 const Avatar: React.FC<AvatarProps> = ({
@@ -25,7 +28,10 @@ const Avatar: React.FC<AvatarProps> = ({
   onEditPress,
   uri,
   isDisabled,
+  colorScheme = 'citrusYellow',
 }) => {
+  const {mainColor, min1Color} = useColorScheme(colorScheme);
+
   const [sizeStyle, iconSize] = useMemo(() => {
     switch (size) {
       case AvatarSize.LARGE:
@@ -39,8 +45,8 @@ const Avatar: React.FC<AvatarProps> = ({
   }, [size]);
 
   return (
-    <View style={styles.avatarBorder}>
-      <View style={[styles.avatar, sizeStyle]}>
+    <View style={[styles.avatarBorder, {borderColor: min1Color}]}>
+      <View style={[styles.avatar, sizeStyle, {backgroundColor: mainColor}]}>
         {uri && (
           <Image
             style={[styles.avatar, sizeStyle]}

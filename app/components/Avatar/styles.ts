@@ -4,13 +4,11 @@ import {Colors, FontSizes, Radii, Spaces} from '../../constants';
 const styles = StyleSheet.create({
   avatarBorder: {
     borderWidth: 2,
-    borderColor: Colors.neutralBorder,
     borderRadius: Radii.full,
     padding: Spaces.xTiny,
   },
   avatar: {
     borderRadius: Radii.full,
-    backgroundColor: Colors.citrusYellow,
     justifyContent: 'center',
     alignItems: 'center',
     resizeMode: 'cover',

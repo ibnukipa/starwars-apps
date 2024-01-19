@@ -20,8 +20,8 @@ const useButtonStyle = (
     return [
       Colors[curColorScheme],
       Colors[`${curColorScheme}Plus1`],
+      Colors[`${curColorScheme}Min1`],
       Colors[`${curColorScheme}Min2`],
-      Colors[`${curColorScheme}Min3`],
     ];
   }, [curColorScheme]);
 
