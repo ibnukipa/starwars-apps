@@ -2,8 +2,8 @@ import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   tiny: {
-    width: 14,
-    height: 14,
+    width: 18,
+    height: 18,
   },
   small: {
     width: 22,

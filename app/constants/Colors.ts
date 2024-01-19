@@ -37,6 +37,13 @@ const Colors = {
   victoriaBlueMin2: '#B6CDE2',
   victoriaBlueMin3: '#DBE6F1',
 
+  radiantOrchidPlus2: '#341D2F',
+  radiantOrchidPlus1: '#4E2C47',
+  radiantOrchid: '#AE629E',
+  radiantOrchidMin1: '#D2A9CA',
+  radiantOrchidMin2: '#E7D0E2',
+  radiantOrchidMin3: '#F3E7F0',
+
   crimsonRedPlus2: '#8A1A38',
   crimsonRedPlus1: '#C61F4D',
   crimsonRed: '#EE255C',
@@ -59,6 +66,7 @@ export const ColorSchemes = {
   victoriaBlue: 'victoriaBlue',
   crimsonRed: 'crimsonRed',
   jadeGreen: 'jadeGreen',
+  radiantOrchid: 'radiantOrchid',
 };
 
 export const ColorSchemeGradients = {
