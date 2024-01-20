@@ -40,7 +40,7 @@ const Home: React.FC<BottomTabScreenProps<HomeTabParamList, 'Home'>> = () => {
         {
           icon: 'masks',
           label: 'Skin',
-          value: user?.startWarProfile?.skin_color.split(',')[0],
+          value: user?.startWarProfile?.skin_color?.split(',')[0],
           isCard: true,
           colorScheme: 'citrusYellow',
         },
@@ -56,7 +56,7 @@ const Home: React.FC<BottomTabScreenProps<HomeTabParamList, 'Home'>> = () => {
         {
           icon: 'eye',
           label: 'Eye',
-          value: user?.startWarProfile?.eye_color.split(',')[0],
+          value: user?.startWarProfile?.eye_color?.split(',')[0],
           isCard: true,
           colorScheme: 'citrusYellow',
         },
@@ -70,7 +70,7 @@ const Home: React.FC<BottomTabScreenProps<HomeTabParamList, 'Home'>> = () => {
         {
           icon: 'blackHole',
           label: 'Hair',
-          value: user?.startWarProfile?.hair_color.split(',')[0],
+          value: user?.startWarProfile?.hair_color?.split(',')[0],
           isCard: true,
           colorScheme: 'citrusYellow',
         },

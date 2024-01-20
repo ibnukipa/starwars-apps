@@ -43,6 +43,8 @@ const useButtonStyle = (
     switch (size) {
       case ButtonSize.SMALL:
         return [styles.small, styles.textSmall];
+      case ButtonSize.XSMALL:
+        return [styles.xSmall, styles.textSmall];
       case ButtonSize.TINY:
         return [styles.tiny, styles.textTiny];
       case ButtonSize.REGULAR:

@@ -1,13 +1,13 @@
 import {User} from '../stores';
 import {getNameAlias} from '../utils';
 
-export type RegistrationForm = {
+export type CreateAccountForm = {
   confirmPassword: string;
   isValid: boolean;
   isEmpty: boolean;
 } & User;
 
-export type RegistrationFormActions =
+export type CreateAccountFormActions =
   | 'setEmail'
   | 'setFirstName'
   | 'setLastName'
@@ -16,19 +16,19 @@ export type RegistrationFormActions =
   | 'setJobTitle'
   | 'setAvatar';
 
-const validateForm = (_values: RegistrationForm): boolean => {
+const validateForm = (_values: CreateAccountForm): boolean => {
   // TODO crate validation for each fields
   return true;
 };
 
-export const registrationFormReducer = (
-  state: RegistrationForm,
+export const createAccountFormReducer = (
+  state: CreateAccountForm,
   action: {
-    type: RegistrationFormActions;
+    type: CreateAccountFormActions;
     value: string;
   },
-): RegistrationForm => {
-  const newState: RegistrationForm = {...state};
+): CreateAccountForm => {
+  const newState: CreateAccountForm = {...state};
   switch (action.type) {
     case 'setEmail': {
       newState.email = action.value;
@@ -67,15 +67,21 @@ export const registrationFormReducer = (
   return newState;
 };
 
-export const registrationFormInitialValues: RegistrationForm = {
+export const createAccountFormInitialValues: CreateAccountForm = {
+  isValid: false,
+  isEmpty: true,
+
   id: '',
   email: '',
   firstName: '',
   lastName: '',
   password: '',
   confirmPassword: '',
-  isValid: false,
-  isEmpty: true,
   nameAlias: undefined,
   avatar: undefined,
+  jobTitle: undefined,
+  startWarProfile: {},
+
+  groupIds: [],
+  invitedGroupIds: [],
 };

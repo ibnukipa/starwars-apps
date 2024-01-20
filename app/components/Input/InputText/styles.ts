@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {Colors, FontSizes, Heights, Radii, Spaces} from '../../constants';
+import {Colors, FontSizes, Heights, Radii, Spaces} from '../../../constants';
 
 const styles = StyleSheet.create({
   textInputContainer: {
@@ -9,6 +9,15 @@ const styles = StyleSheet.create({
     borderColor: Colors.neutralBorder,
     height: Heights.input,
     borderWidth: 1,
+  },
+  textInputContainerWithLabel: {
+    paddingLeft: Spaces.tiny,
+  },
+  textInputContainerWithFloatingLabel: {
+    marginTop: Spaces.xTiny,
+  },
+  textInputMultilineContainer: {
+    minHeight: Heights.multilineInput,
   },
   textInputContainerDisabled: {
     backgroundColor: Colors.neutralContainer,
@@ -20,6 +29,11 @@ const styles = StyleSheet.create({
     borderColor: Colors.neutralBorder,
     height: Heights.smallInput,
     borderWidth: 1,
+  },
+  textInputMultilineSmallContainer: {
+    paddingVertical: Spaces.regular,
+    height: undefined,
+    minHeight: Heights.multilineSmallInput,
   },
   textInput: {
     paddingTop: 0,
@@ -37,6 +51,9 @@ const styles = StyleSheet.create({
   },
   textInputLabel: {
     fontSize: FontSizes.regular,
+  },
+  textInputMultilineLabel: {
+    marginLeft: Spaces.tiny,
   },
 });
 

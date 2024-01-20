@@ -1,7 +1,7 @@
 import React, {useCallback, useRef} from 'react';
 import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
-import {StackScreenProps} from '@react-navigation/stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {StackScreenProps} from '@react-navigation/stack';
 
 import {
   Avatar,
@@ -9,6 +9,7 @@ import {
   BottomSheet,
   Button,
   InputText,
+  InputTextMultiple,
   InputTextSize,
   KeyboardAvoidingView,
   SecondaryHeader,
@@ -16,28 +17,28 @@ import {
 import {BaseStyle} from '../styles/base.ts';
 import {RootStackParamList} from '../routes/types.ts';
 import {Colors, Spaces} from '../constants';
-import {useAuthStore} from '../stores';
 import {
-  CreateAccountForm,
-  CreateAccountFormActions,
-  createAccountFormInitialValues,
-  createAccountFormReducer,
+  CreateGroupForm,
+  CreateGroupFormActions,
+  createGroupFormInitialValues,
+  createGroupFormReducer,
 } from '../forms';
 import {useAvatarPicker, useForm} from '../hooks';
+import useGroupStore from '../stores/groups.ts';
 
-const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
-  navigation,
-}) => {
+const GroupRegistration: React.FC<
+  StackScreenProps<RootStackParamList, 'GroupRegistration'>
+> = ({navigation}) => {
   const avatarPickerOptionRef = useRef<BottomSheet>(null);
-  const [signUp, isSignUpLoading] = useAuthStore(state => [
-    state.signUp,
-    state.isSignUpLoading,
+  const [groupCreate, isGroupCreating] = useGroupStore(state => [
+    state.create,
+    state.isCreating,
   ]);
 
   const [formState, formSetValue] = useForm<
-    CreateAccountForm,
-    CreateAccountFormActions
-  >(createAccountFormReducer, createAccountFormInitialValues);
+    CreateGroupForm,
+    CreateGroupFormActions
+  >(createGroupFormReducer, createGroupFormInitialValues);
 
   const setAvatar = useCallback(
     (image: string) => {
@@ -55,12 +56,12 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
   }, []);
 
   const registerPress = useCallback(() => {
-    signUp(formState).then(isSuccess => {
+    groupCreate(formState).then(isSuccess => {
       if (isSuccess) {
         navigation.goBack();
       }
     });
-  }, [formState, signUp, navigation]);
+  }, [formState, groupCreate, navigation]);
 
   return (
     <SafeAreaView edges={['left', 'right']} style={BaseStyle.container}>
@@ -69,7 +70,10 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
         backgroundColor={Colors.neutralWhite}
       />
       <KeyboardAvoidingView style={BaseStyle.flex}>
-        <SecondaryHeader title={'Create New Account'} />
+        <SecondaryHeader
+          title={'Create New Group'}
+          colorScheme={'radiantOrchid'}
+        />
         <ScrollView
           keyboardShouldPersistTaps={'handled'}
           showsVerticalScrollIndicator={false}
@@ -77,60 +81,32 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
           <SafeAreaView edges={['bottom']}>
             <View style={[BaseStyle.centered, styles.avatarContainer]}>
               <Avatar
-                isDisabled={isSignUpLoading}
+                colorScheme={'radiantOrchid'}
+                isDisabled={isGroupCreating}
                 uri={formState.avatar}
                 onEditPress={avatarPickerOptionPress}
                 placeholder={formState.nameAlias}
               />
             </View>
             <InputText
-              isDisabled={isSignUpLoading}
+              isDisabled={isGroupCreating}
               size={InputTextSize.SMALL}
-              label={'Email'}
-              onChangeText={formSetValue('setEmail')}
-              placeholder={'john.doe@gmail.com'}
-              autoCapitalize={'none'}
-              autoCorrect={false}
-            />
-            <View style={BaseStyle.divider} />
-            <InputText
-              isDisabled={isSignUpLoading}
-              size={InputTextSize.SMALL}
-              label={'First name'}
-              onChangeText={formSetValue('setFirstName')}
-              placeholder={'John'}
+              label={'Name'}
+              onChangeText={formSetValue('setName')}
+              placeholder={'Rebel Alliance'}
             />
             <InputText
-              isDisabled={isSignUpLoading}
+              isDisabled={isGroupCreating}
               size={InputTextSize.SMALL}
-              label={'Last name'}
-              onChangeText={formSetValue('setLastName')}
-              placeholder={'Doe'}
+              label={'Description'}
+              onChangeText={formSetValue('setDescription')}
+              multiline
+              placeholder={
+                'A starship, also known as a starcruiser, spaceship, spacecraft, or simply just craft or ship.'
+              }
             />
-            <View style={BaseStyle.divider} />
-            <InputText
-              isDisabled={isSignUpLoading}
-              size={InputTextSize.SMALL}
-              label={'Password'}
-              onChangeText={formSetValue('setPassword')}
-              placeholder={'Password'}
-              secureTextEntry
-            />
-            <InputText
-              isDisabled={isSignUpLoading}
-              size={InputTextSize.SMALL}
-              label={'Confirm password'}
-              onChangeText={formSetValue('setConfirmPassword')}
-              placeholder={'Password'}
-              secureTextEntry
-            />
-            <View style={BaseStyle.divider} />
-            <InputText
-              isDisabled={isSignUpLoading}
-              size={InputTextSize.SMALL}
-              label={'Job Title'}
-              onChangeText={formSetValue('setJobTitle')}
-              placeholder={'Jedi'}
+            <InputTextMultiple
+              onChangeText={formSetValue('setInvitedMemberEmails')}
             />
           </SafeAreaView>
         </ScrollView>
@@ -142,16 +118,18 @@ const SignUp: React.FC<StackScreenProps<RootStackParamList, 'SignUp'>> = ({
           ]}
           edges={['bottom']}>
           <Button
-            isLoading={isSignUpLoading}
+            colorScheme={'radiantOrchid'}
+            isLoading={isGroupCreating}
             isDisabled={!formState.isValid || formState.isEmpty}
             onPress={registerPress}
             style={BaseStyle.space}>
-            Signup
+            Create Group
           </Button>
         </SafeAreaView>
       </KeyboardAvoidingView>
       <AvatarModal
         ref={avatarPickerOptionRef}
+        colorScheme={'radiantOrchid'}
         cameraPress={avatarPickCameraPress}
         libraryPress={avatarPickLibraryPress}
       />
@@ -164,14 +142,11 @@ const styles = StyleSheet.create({
     paddingBottom: Spaces.presentationModal,
     backgroundColor: Colors.neutralWhite,
   },
-  titleContainer: {
-    justifyContent: 'space-between',
-  },
   avatarContainer: {
     marginBottom: Spaces.regular,
   },
 });
 
-SignUp.displayName = 'SignUpScreen';
+GroupRegistration.displayName = 'GroupRegistrationScreen';
 
-export default SignUp;
+export default GroupRegistration;

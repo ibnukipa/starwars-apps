@@ -16,11 +16,26 @@ export const BaseStyle = StyleSheet.create({
   pad: {
     padding: Spaces.regular,
   },
+  padTop: {
+    paddingTop: Spaces.regular,
+  },
   padTinyX: {
     paddingHorizontal: Spaces.tiny,
   },
   padTinyRight: {
     marginRight: Spaces.tiny,
+  },
+  padTinyTop: {
+    paddingTop: Spaces.tiny,
+  },
+  marginTop: {
+    marginTop: Spaces.regular,
+  },
+  marginTopMedium: {
+    marginTop: Spaces.medium,
+  },
+  marginTinyTop: {
+    marginTop: Spaces.tiny,
   },
   centered: {
     justifyContent: 'center',
@@ -59,8 +74,17 @@ export const BaseStyle = StyleSheet.create({
   verticalCentered: {
     alignItems: 'center',
   },
+  noMarginBottom: {
+    marginBottom: 0,
+  },
   spaceBetween: {
     justifyContent: 'space-between',
+  },
+  flexStart: {
+    alignSelf: 'flex-start',
+  },
+  flexEnd: {
+    alignSelf: 'flex-end',
   },
   headerContainer: {
     paddingBottom: Spaces.small,
@@ -90,9 +114,16 @@ export const BaseStyle = StyleSheet.create({
     height: 1,
     width: '100%',
   },
+  dividerPlainTiny: {
+    marginVertical: Spaces.xTiny,
+    height: 1,
+    width: '100%',
+  },
   dividerVertical: {
     marginHorizontal: Spaces.tiny,
     backgroundColor: Colors.citrusYellowPlus1,
     height: '100%',
   },
+  // TODO List
+  listEmptyContainer: {},
 });

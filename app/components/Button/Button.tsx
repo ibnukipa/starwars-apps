@@ -21,6 +21,7 @@ export enum ButtonVariant {
 export enum ButtonSize {
   REGULAR,
   SMALL,
+  XSMALL,
   TINY,
 }
 

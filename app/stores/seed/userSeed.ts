@@ -20,6 +20,8 @@ const userSeed: Record<User['email'], User> = {
       birth_year: '19BBY',
       gender: 'male',
     },
+    groupIds: [],
+    invitedGroupIds: [],
   },
   'c.3po@gmail.com': {
     id: '2',
@@ -40,6 +42,8 @@ const userSeed: Record<User['email'], User> = {
       birth_year: '112BBY',
       gender: 'n/a',
     },
+    groupIds: [],
+    invitedGroupIds: [],
   },
   'r2.d2@gmail.com': {
     id: '3',
@@ -60,6 +64,8 @@ const userSeed: Record<User['email'], User> = {
       birth_year: '33BBY',
       gender: 'n/a',
     },
+    groupIds: [],
+    invitedGroupIds: [],
   },
   'darth.vader@gmail.com': {
     id: '4',
@@ -80,6 +86,8 @@ const userSeed: Record<User['email'], User> = {
       birth_year: '41.9BBY',
       gender: 'male',
     },
+    groupIds: [],
+    invitedGroupIds: [],
   },
   'leia.organa@gmail.com': {
     id: '5',
@@ -100,6 +108,8 @@ const userSeed: Record<User['email'], User> = {
       birth_year: '19BBY',
       gender: 'female',
     },
+    groupIds: [],
+    invitedGroupIds: [],
   },
   'owen.lars@gmail.com': {
     id: '6',
@@ -120,6 +130,8 @@ const userSeed: Record<User['email'], User> = {
       birth_year: '52BBY',
       gender: 'male',
     },
+    groupIds: [],
+    invitedGroupIds: [],
   },
   'beru.lars@gmail.com': {
     id: '7',
@@ -140,6 +152,8 @@ const userSeed: Record<User['email'], User> = {
       birth_year: '47BBY',
       gender: 'female',
     },
+    groupIds: [],
+    invitedGroupIds: [],
   },
   'r5.d4@gmail.com': {
     id: '8',
@@ -160,6 +174,8 @@ const userSeed: Record<User['email'], User> = {
       birth_year: 'unknown',
       gender: 'n/a',
     },
+    groupIds: [],
+    invitedGroupIds: [],
   },
   'bigss.darklighter@gmail.com': {
     id: '9',
@@ -180,6 +196,8 @@ const userSeed: Record<User['email'], User> = {
       birth_year: '24BBY',
       gender: 'male',
     },
+    groupIds: [],
+    invitedGroupIds: [],
   },
   'obi.kenobi@gmail.com': {
     id: '10',
@@ -200,6 +218,8 @@ const userSeed: Record<User['email'], User> = {
       birth_year: '57BBY',
       gender: 'male',
     },
+    groupIds: [],
+    invitedGroupIds: [],
   },
 };
 

@@ -20,6 +20,10 @@ const styles = StyleSheet.create({
     minHeight: Heights.smallButton,
     paddingHorizontal: Spaces.regular,
   },
+  xSmall: {
+    minHeight: Heights.xSmallButton,
+    paddingHorizontal: Spaces.regular,
+  },
   tiny: {
     minHeight: Heights.tinyButton,
     paddingHorizontal: Spaces.regular,

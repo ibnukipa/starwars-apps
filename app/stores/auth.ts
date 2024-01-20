@@ -4,7 +4,7 @@ import {immer} from 'zustand/middleware/immer';
 import {User} from './users.ts';
 import {useUserStore} from './index.ts';
 import {showToast} from '../components';
-import {RegistrationForm, LoginForm} from '../forms';
+import {CreateAccountForm, LoginForm} from '../forms';
 import {fetchWithTimeout, generateUUID} from '../utils';
 
 interface AuthState {
@@ -16,9 +16,10 @@ interface AuthState {
 }
 
 interface AuthActions {
+  // side effect operations / state manipulation
   signIn: (signInForm: LoginForm) => void;
   signOut: () => void;
-  signUp: (signUpForm: RegistrationForm) => Promise<boolean>;
+  signUp: (signUpForm: CreateAccountForm) => Promise<boolean>;
 }
 
 const useAuthStore = create(
@@ -28,6 +29,7 @@ const useAuthStore = create(
     isSignInLoading: false,
     isSignUpLoading: false,
     isSignOutLoading: false,
+
     signIn: async signInForm => {
       setState({isSignInLoading: true});
 
@@ -41,7 +43,7 @@ const useAuthStore = create(
         return;
       }
 
-      // call non-existent API
+      // call API
       const response = await fetchWithTimeout(
         'https://localhost:8080/sign-in',
         {
@@ -56,7 +58,7 @@ const useAuthStore = create(
         const {verifyPassword} = useUserStore.getState();
         user = verifyPassword(signInForm.email, signInForm.password);
       } else {
-        // TODO: proceed the response object
+        // TODO: proceed the API response object and set user
       }
 
       // sign-in side effect
@@ -96,20 +98,20 @@ const useAuthStore = create(
         return false;
       }
 
-      // call non-existent API
+      // call API
       const response = await fetchWithTimeout(
         'https://localhost:8080/sign-up',
         {
           method: 'post',
         },
       );
+      const {add: addUser, fetchStarWarsPeopleByName} = useUserStore.getState();
+      let newUser: User | null = null;
       if (!response || !response.ok) {
         // in-memory strategy
         const uuid = generateUUID();
-        const {add: addUser, fetchStarWarsPeopleByName} =
-          useUserStore.getState();
         const people = await fetchStarWarsPeopleByName(signUpForm.firstName);
-        addUser({
+        newUser = {
           id: uuid,
           email: signUpForm.email,
           firstName: signUpForm.firstName,
@@ -118,13 +120,22 @@ const useAuthStore = create(
           nameAlias: signUpForm.nameAlias,
           avatar: signUpForm.avatar,
           startWarProfile: people,
-        });
+
+          // need to initiate in order to avoid nullish check
+          groupIds: signUpForm.groupIds,
+          invitedGroupIds: signUpForm.invitedGroupIds,
+        };
       } else {
-        // TODO: proceed the response object
+        // TODO: proceed the API response
       }
 
       // sign-up side effect
+      if (newUser) {
+        addUser(newUser);
+      }
+
       setState({isSignUpLoading: false});
+      // TODO: optionally create notification
       showToast({
         title: 'Success',
         message: `Registered new user with ${signUpForm.email}`,
@@ -133,7 +144,7 @@ const useAuthStore = create(
       return true;
     },
     signOut: () => {
-      // TODO call non-existent API
+      // TODO call API
 
       // sign-out side effect
       setState(state => {
