@@ -3,6 +3,7 @@ import {immer} from 'zustand/middleware/immer';
 
 import {People, searchPeopleApi} from '../apis';
 import {userSeed} from './seed';
+import {removeValue} from '../utils';
 
 export interface User {
   id: string;
@@ -29,8 +30,13 @@ interface UserActions {
   // DB Operations
   add: (user: User) => void;
   addGroupId: (email: User['email'], groupId: string) => void;
+  removeGroupId: (email: User['email'], groupId: string) => void;
   addGroupIdByEmails: (emails: Array<User['email']>, groupId: string) => void;
   addInvitedGroupId: (email: User['email'], groupId: string) => void;
+  addInvitedGroupIdByEmails: (
+    emails: Array<User['email']>,
+    groupId: string,
+  ) => void;
   getUserIdsByEmails: (emails: Array<User['email']>) => Array<User['id']>;
 
   // side effect operations / state manipulation
@@ -62,13 +68,28 @@ const useUserStore = create(
       setState(state => {
         state.users[email].groupIds.push(groupId);
 
+        // remove invited groupId
+        const invitedGroupIds = state.users[email].invitedGroupIds;
+        state.users[email].invitedGroupIds = removeValue(
+          invitedGroupIds,
+          groupId,
+        );
+
+        return state;
+      });
+    },
+    removeGroupId: (email, groupId) => {
+      setState(state => {
+        const groupIds = state.users[email].groupIds;
+        state.users[email].groupIds = removeValue(groupIds, groupId);
+
         return state;
       });
     },
     addGroupIdByEmails: (emails, groupId) => {
       const {addGroupId} = getState();
       emails.forEach(email => {
-        addGroupId(email, groupId);
+        addGroupId(email.toLowerCase(), groupId);
       });
     },
     addInvitedGroupId: (email, groupId) => {
@@ -78,10 +99,18 @@ const useUserStore = create(
         return state;
       });
     },
+    addInvitedGroupIdByEmails: (emails, groupId) => {
+      const {addInvitedGroupId} = getState();
+      emails.forEach(email => {
+        addInvitedGroupId(email.toLowerCase(), groupId);
+      });
+    },
     getUserIdsByEmails: emails => {
       return emails.reduce((ids: Array<string>, email) => {
-        const curUser = getState().users[email];
-        ids.push(curUser.id);
+        const curUser = getState().users[email.toLowerCase()];
+        if (curUser) {
+          ids.push(curUser.id);
+        }
         return ids;
       }, []);
     },

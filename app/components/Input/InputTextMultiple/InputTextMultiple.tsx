@@ -7,10 +7,12 @@ import {generateUUID} from '../../../utils';
 
 export interface InputTextMultipleProps {
   onChangeText: (value: string) => void;
+  isDisabled?: boolean;
 }
 
 const InputTextMultiple: React.FC<InputTextMultipleProps> = ({
   onChangeText,
+  isDisabled,
 }) => {
   const [inputs, setInputs] = useState<Array<string>>([generateUUID()]);
 
@@ -48,6 +50,7 @@ const InputTextMultiple: React.FC<InputTextMultipleProps> = ({
         <View key={item} style={[BaseStyle.row, BaseStyle.verticalCentered]}>
           <View style={BaseStyle.flex}>
             <InputText
+              isDisabled={isDisabled}
               onChangeText={onChangeEmail(index)}
               isFloatingLabel
               label={isFirstItem ? 'Invite Member' : undefined}
@@ -55,11 +58,12 @@ const InputTextMultiple: React.FC<InputTextMultipleProps> = ({
               size={InputTextSize.SMALL}
               wrapperStyle={BaseStyle.noMarginBottom}
               autoCapitalize={'none'}
+              autoCorrect={false}
             />
           </View>
           <View style={BaseStyle.dividerVertical} />
           <Button
-            isDisabled={isFirstItem && inputs.length < 2}
+            isDisabled={(isFirstItem && inputs.length < 2) || isDisabled}
             onPress={remove(index)}
             colorScheme={'crimsonRed'}
             style={
@@ -72,7 +76,7 @@ const InputTextMultiple: React.FC<InputTextMultipleProps> = ({
         </View>
       );
     },
-    [remove, inputs.length, onChangeEmail],
+    [remove, inputs.length, onChangeEmail, isDisabled],
   );
 
   return (
@@ -81,6 +85,7 @@ const InputTextMultiple: React.FC<InputTextMultipleProps> = ({
       <View style={BaseStyle.dividerPlain} />
       <View style={BaseStyle.row}>
         <Button
+          isDisabled={isDisabled}
           onPress={add}
           colorScheme={'victoriaBlue'}
           variant={ButtonVariant.TERTIARY}

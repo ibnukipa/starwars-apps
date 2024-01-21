@@ -1,4 +1,4 @@
-import React, {forwardRef, useCallback} from 'react';
+import React, {forwardRef, useCallback, useMemo} from 'react';
 import {View} from 'react-native';
 import {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
@@ -13,7 +13,7 @@ import {ItemGroup} from '../../ItemGroup';
 import {BottomSheet} from '../../BottomSheet';
 import styles from './styles.ts';
 import {RootStackParamList} from '../../../routes/types.ts';
-import useGroupStore, {Group} from '../../../stores/groups.ts';
+import {useAuthStore} from '../../../stores';
 
 export interface GroupModalProps {
   isHasBottomTabBar?: boolean;
@@ -26,14 +26,21 @@ const GroupModal = forwardRef<GroupModal, GroupModalProps>(
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const tabBarHeight = useBottomTabBarHeight();
 
-    const [getFlattenGroups] = useGroupStore(state => [state.getFlattenGroups]);
+    const [currentUser] = useAuthStore(state => [state.user]);
+
+    const mergedGroupIds = useMemo(() => {
+      return [
+        ...(currentUser?.invitedGroupIds || []),
+        ...(currentUser?.groupIds || []),
+      ];
+    }, [currentUser?.groupIds, currentUser?.invitedGroupIds]);
 
     const renderItemSeparator = useCallback(() => {
       return <View style={BaseStyle.dividerPlain} />;
     }, []);
 
-    const renderItem = useCallback(({item}: {item: Group}) => {
-      return <ItemGroup {...item} />;
+    const renderItem = useCallback(({item}: {item: string}) => {
+      return <ItemGroup id={item} />;
     }, []);
 
     const navigateToGroupRegistration = useCallback(() => {
@@ -86,7 +93,7 @@ const GroupModal = forwardRef<GroupModal, GroupModalProps>(
               </Button>
             </View>
           }
-          data={getFlattenGroups()}
+          data={mergedGroupIds}
           renderItem={renderItem}
           ItemSeparatorComponent={renderItemSeparator}
           ListFooterComponent={

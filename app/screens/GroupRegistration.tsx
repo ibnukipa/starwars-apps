@@ -106,6 +106,7 @@ const GroupRegistration: React.FC<
               }
             />
             <InputTextMultiple
+              isDisabled={isGroupCreating}
               onChangeText={formSetValue('setInvitedMemberEmails')}
             />
           </SafeAreaView>

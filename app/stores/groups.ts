@@ -1,11 +1,12 @@
 import {getStarship, Starship} from '../apis';
 import {create} from 'zustand';
 import {immer} from 'zustand/middleware/immer';
+
 import {CreateGroupForm} from '../forms';
 import {showToast} from '../components';
-import {fetchWithTimeout} from '../utils';
+import {fetchWithTimeout, removeValue} from '../utils';
 import useAuthStore from './auth.ts';
-import useUserStore from './users.ts';
+import useUserStore, {User} from './users.ts';
 
 export interface Group {
   id: string;
@@ -27,19 +28,24 @@ interface GroupState {
 
   // side effect state
   isCreating: boolean;
+  isAccepting: boolean;
+  isRemovingOrLeavingMember: boolean;
 }
 
 interface GroupActions {
   // DB Operations
   add: (group: Group) => void;
-  addMemberId: (groupId: string, email: string) => void;
-  addInvitedMemberId: (groupId: string, email: string) => void;
+  addMemberId: (groupId: string, userId: string) => void;
+  removeMemberId: (groupId: string, userId: string) => void;
+  addInvitedMemberId: (groupId: string, userId: string) => void;
   getFlattenGroups: () => Array<Group>;
 
   // side effect operations / state manipulation
   create: (groupForm: CreateGroupForm) => Promise<boolean>;
-  accept: () => void;
+  accept: (groupId: string) => Promise<boolean>;
   reject: () => void;
+  leave: () => void;
+  removeOrLeaveMember: (groupId: string, userId?: string) => Promise<boolean>;
   getIsOwner: (group: Group) => boolean;
   getIsInvited: (group: Group) => boolean;
   getIsMember: (group: Group) => boolean;
@@ -53,6 +59,8 @@ const useGroupStore = create(
     groups: {},
 
     isCreating: false,
+    isAccepting: false,
+    isRemovingOrLeavingMember: false,
 
     add: group => {
       setState(state => {
@@ -61,8 +69,35 @@ const useGroupStore = create(
         return state;
       });
     },
-    addMemberId: () => {},
-    addInvitedMemberId: () => {},
+    addMemberId: (groupId, userId) => {
+      setState(state => {
+        state.groups[groupId].memberIds.push(userId);
+
+        // remove invited memberId
+        const invitedMemberIds = state.groups[groupId].invitedMemberIds;
+        state.groups[groupId].invitedMemberIds = removeValue(
+          invitedMemberIds,
+          userId,
+        );
+
+        return state;
+      });
+    },
+    removeMemberId: (groupId, userId) => {
+      setState(state => {
+        const memberIds = state.groups[groupId].memberIds;
+        state.groups[groupId].memberIds = removeValue(memberIds, userId);
+
+        return state;
+      });
+    },
+    addInvitedMemberId: (groupId, userId) => {
+      setState(state => {
+        state.groups[groupId].invitedMemberIds.push(userId);
+
+        return state;
+      });
+    },
     getFlattenGroups: () => Object.values(getState().groups),
 
     create: async groupForm => {
@@ -80,13 +115,13 @@ const useGroupStore = create(
 
       // call API
       const response = await fetchWithTimeout(
-        'https://localhost:8080/sign-up',
+        'https://localhost:8080/create-group',
         {
           method: 'post',
         },
       );
 
-      const {user: owner} = useAuthStore.getState();
+      const {user: owner, updateUser} = useAuthStore.getState();
       if (!owner) {
         showToast({
           message: 'Please sign-in first',
@@ -95,7 +130,7 @@ const useGroupStore = create(
         return false;
       }
 
-      const {getUserIdsByEmails, addGroupIdByEmails} = useUserStore.getState();
+      const {getUserIdsByEmails, addGroupIdByEmails, addInvitedGroupIdByEmails} = useUserStore.getState();
       const {add: addGroup, groups} = getState();
       let newGroup: Group | null = null;
 
@@ -114,17 +149,19 @@ const useGroupStore = create(
           memberIds: [owner.id],
           invitedMemberIds: getUserIdsByEmails(groupForm.invitedMemberEmails),
         };
+
+        if (newGroup) {
+          addGroup(newGroup);
+          addGroupIdByEmails([owner.email], newGroup.id);
+          addInvitedGroupIdByEmails(groupForm.invitedMemberEmails, newGroup.id);
+          // TODO: create in app-notification to invitee
+        }
       } else {
         // TODO: proceed the API response
       }
 
-      if (newGroup) {
-        addGroup(newGroup);
-        addGroupIdByEmails(groupForm.invitedMemberEmails, newGroup.id);
-        // TODO: create notification to invitee
-      }
-
       setState({isCreating: false});
+      updateUser();
       // TODO: optionally create notification to owner
       showToast({
         title: 'Success',
@@ -133,9 +170,106 @@ const useGroupStore = create(
       });
       return true;
     },
-    accept: () => {},
+    accept: async (groupId: string) => {
+      setState({isAccepting: true});
+
+      const group = getState().groups[groupId];
+      if (!group) {
+        showToast({
+          message: 'The group does not exist anymore',
+          colorScheme: 'crimsonRed',
+        });
+        setState({isAccepting: false});
+        return false;
+      }
+
+      // call API
+      const response = await fetchWithTimeout(
+        'https://localhost:8080/accept-group',
+        {
+          method: 'post',
+        },
+      );
+
+      const {updateUser} = useAuthStore.getState();
+      if (!response || !response.ok) {
+        // in-memory strategy
+        const {addMemberId} = getState();
+        const {addGroupId} = useUserStore.getState();
+        const {user: currentUser} = useAuthStore.getState();
+        const userId = currentUser?.id;
+
+        if (userId && groupId) {
+          addMemberId(groupId, userId);
+          addGroupId(currentUser.email, groupId);
+          // TODO create notification to group owner
+        }
+      } else {
+        // TODO: proceed the API response object
+      }
+
+      setState({isAccepting: false});
+      updateUser();
+      // TODO: optionally create notification to member
+      showToast({
+        title: 'Success',
+        message: `Joined new group ${group.name}`,
+        colorScheme: 'jadeGreen',
+      });
+      return true;
+    },
     // TODO: add reject functionality
     reject: () => {},
+    // TODO: add leave functionality
+    leave: () => {},
+    // TODO: add remove member functionality
+    removeOrLeaveMember: async (groupId: string, userEmail?: string) => {
+      setState({isRemovingOrLeavingMember: true});
+      const group = getState().groups[groupId];
+      if (!group) {
+        showToast({
+          message: 'The group does not exist anymore',
+          colorScheme: 'crimsonRed',
+        });
+        setState({isRemovingOrLeavingMember: false});
+        return false;
+      }
+
+      // call API
+      const response = await fetchWithTimeout(
+        'https://localhost:8080/accept-group',
+        {
+          method: 'post',
+        },
+      );
+
+      const {user: currentUser, updateUser} = useAuthStore.getState();
+      let user: User | null = null;
+
+      if (!response || !response.ok) {
+        // in-memory strategy
+        const {users, removeGroupId} = useUserStore.getState();
+        const {removeMemberId} = getState();
+        user = userEmail ? users[userEmail] : currentUser;
+
+        if (user) {
+          removeMemberId(groupId, user.id);
+          removeGroupId(user.email, groupId);
+        }
+      } else {
+        // TODO: proceed the API response object
+      }
+
+      setState({isRemovingOrLeavingMember: false});
+      updateUser();
+      // TODO: optionally create notification to member
+      showToast({
+        title: 'Success',
+        message: `Removed ${user?.firstName} from group ${group.name}`,
+        colorScheme: 'jadeGreen',
+      });
+      return true;
+    },
     getIsOwner: (group: Group) => {
       const currentUser = useAuthStore.getState().user;
 

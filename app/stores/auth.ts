@@ -20,10 +20,11 @@ interface AuthActions {
   signIn: (signInForm: LoginForm) => void;
   signOut: () => void;
   signUp: (signUpForm: CreateAccountForm) => Promise<boolean>;
+  updateUser: () => void;
 }
 
 const useAuthStore = create(
-  immer<AuthState & AuthActions>(setState => ({
+  immer<AuthState & AuthActions>((setState, getState) => ({
     user: null,
     isLoggedIn: false,
     isSignInLoading: false,
@@ -106,12 +107,11 @@ const useAuthStore = create(
         },
       );
       const {add: addUser, fetchStarWarsPeopleByName} = useUserStore.getState();
-      let newUser: User | null = null;
       if (!response || !response.ok) {
         // in-memory strategy
         const uuid = generateUUID();
         const people = await fetchStarWarsPeopleByName(signUpForm.firstName);
-        newUser = {
+        addUser({
           id: uuid,
           email: signUpForm.email,
           firstName: signUpForm.firstName,
@@ -124,14 +124,9 @@ const useAuthStore = create(
           // need to initiate in order to avoid nullish check
           groupIds: signUpForm.groupIds,
           invitedGroupIds: signUpForm.invitedGroupIds,
-        };
+        });
       } else {
         // TODO: proceed the API response
-      }
-
-      // sign-up side effect
-      if (newUser) {
-        addUser(newUser);
       }
 
       setState({isSignUpLoading: false});
@@ -153,6 +148,17 @@ const useAuthStore = create(
 
         return state;
       });
+    },
+    updateUser: () => {
+      const email = getState().user?.email;
+      if (email) {
+        const updatedUser = useUserStore.getState().users[email];
+        setState(state => {
+          state.user = updatedUser;
+
+          return state;
+        });
+      }
     },
   })),
 );
