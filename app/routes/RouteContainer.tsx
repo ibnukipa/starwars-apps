@@ -7,7 +7,7 @@ import {
 import {NavigationContainer} from '@react-navigation/native';
 import RNBootSplash from 'react-native-bootsplash';
 
-import {GroupRegistration, SignIn, SignUp} from '../screens';
+import {Group, GroupRegistration, SignIn, SignUp} from '../screens';
 import {RootStackParamList} from './types.ts';
 import {useAuthStore} from '../stores';
 import RouteHomeContainer from './RouteHomeContainer.tsx';
@@ -57,6 +57,11 @@ const RouteContainer: React.FC = () => {
             <RootStack.Screen
               name={'GroupRegistration'}
               component={GroupRegistration}
+              options={ScreenModalPresentationOptions}
+            />
+            <RootStack.Screen
+              name={'Group'}
+              component={Group}
               options={ScreenModalPresentationOptions}
             />
           </>

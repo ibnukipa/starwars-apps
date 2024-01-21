@@ -3,6 +3,9 @@ export type RootStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   GroupRegistration: undefined;
+  Group: {
+    id: string;
+  };
 };
 
 export type HomeTabParamList = {

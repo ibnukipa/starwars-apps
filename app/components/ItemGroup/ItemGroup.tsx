@@ -9,6 +9,8 @@ import {Button, ButtonSize, ButtonVariant} from '../Button';
 import {IColorSchemes} from '../../constants';
 import {useColorScheme} from '../../hooks';
 import useGroupStore from '../../stores/groups.ts';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../../routes/types.ts';
 
 export interface ItemGroupProps {
   id: string;
@@ -20,6 +22,7 @@ const ItemGroupAction: React.FC<{
   isInvited: boolean;
   isMember: boolean;
 }> = ({groupId, isOwner, isMember, isInvited}) => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [accept, removeOrLeaveMember, isAccepting, isRemovingOrLeavingMember] =
     useGroupStore(state => {
       return [
@@ -51,21 +54,34 @@ const ItemGroupAction: React.FC<{
     }
   }, [accept, groupId, isInvited, isMember, removeOrLeaveMember]);
 
+  const openPress = useCallback(() => {
+    navigation.navigate('Group', {id: groupId});
+  }, [navigation, groupId]);
+
   if (!text) {
     return null;
   }
 
   return (
-    <Button
-      isLoading={isAccepting || isRemovingOrLeavingMember}
-      onPress={onPress}
-      style={isOwner ? BaseStyle.flexEnd : undefined}
-      isDisabled={isDisabled}
-      colorScheme={colorScheme}
-      variant={ButtonVariant.SECONDARY}
-      size={isOwner ? ButtonSize.TINY : ButtonSize.SMALL}>
-      {text?.toUpperCase()}
-    </Button>
+    <View>
+      <Button
+        isLoading={isAccepting || isRemovingOrLeavingMember}
+        onPress={onPress}
+        isDisabled={isDisabled}
+        colorScheme={colorScheme}
+        variant={ButtonVariant.SECONDARY}
+        size={ButtonSize.TINY}>
+        {text?.toUpperCase()}
+      </Button>
+      <View style={BaseStyle.dividerPlainTiny} />
+      <Button
+        onPress={openPress}
+        colorScheme={'radiantOrchid'}
+        variant={ButtonVariant.SECONDARY}
+        size={ButtonSize.TINY}>
+        Open
+      </Button>
+    </View>
   );
 };
 
@@ -97,6 +113,10 @@ const ItemGroup: React.FC<ItemGroupProps> = ({id}) => {
 
   const {min4Color} = useColorScheme(colorScheme);
 
+  if (!group) {
+    return null;
+  }
+
   return (
     <View
       style={[
@@ -107,6 +127,7 @@ const ItemGroup: React.FC<ItemGroupProps> = ({id}) => {
       ]}>
       <View style={BaseStyle.padTinyRight}>
         <Avatar
+          uri={group.avatar}
           placeholder={group.nameAlias}
           colorScheme={colorScheme}
           size={AvatarSize.SMALL}

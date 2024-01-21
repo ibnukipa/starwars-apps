@@ -13,6 +13,7 @@ type CardItemProps = {
   isCard?: boolean;
   colorScheme?: IColorSchemes;
   icon?: IIcons;
+  isFloatingLabel?: boolean;
 };
 
 export interface CardContentProps {
@@ -25,6 +26,7 @@ const CardItem: React.FC<CardItemProps> = ({
   colorScheme = 'citrusYellow',
   icon,
   isCard,
+  isFloatingLabel,
 }) => {
   const {plus1ColorKey, plus2ColorKey, min1ColorKey, min4Color, min1Color} =
     useColorScheme(colorScheme);
@@ -35,12 +37,13 @@ const CardItem: React.FC<CardItemProps> = ({
         styles.card,
         isCard && {borderColor: min1Color},
         !isCard && {backgroundColor: min4Color, borderWidth: 0},
-        !isCard && BaseStyle.row,
+        !isCard && !isFloatingLabel && BaseStyle.row,
         !isCard && BaseStyle.verticalCentered,
         !isCard && BaseStyle.spaceBetween,
         !isCard && styles.cardSingle,
+        isFloatingLabel && styles.cardContainerFloatingLabel,
       ]}>
-      {icon && (
+      {icon && !isFloatingLabel && (
         <Icon
           wrapperStyle={[
             BaseStyle.padTinyRight,
@@ -53,16 +56,37 @@ const CardItem: React.FC<CardItemProps> = ({
           name={icon}
         />
       )}
+      {!isFloatingLabel && (
+        <Text
+          color={plus1ColorKey}
+          fontWeight={'bold'}
+          style={[
+            styles.cardLabel,
+            !isCard && styles.cardSingleLabel,
+            !isCard && isFloatingLabel && styles.cardFloatingLabel,
+          ]}>
+          {label.toUpperCase()}
+        </Text>
+      )}
+      {isFloatingLabel && (
+        <Text
+          color={plus1ColorKey}
+          fontWeight={'bold'}
+          style={[styles.cardLabel, styles.cardFloatingLabel]}>
+          {label.toUpperCase()}
+        </Text>
+      )}
       <Text
-        color={plus1ColorKey}
-        fontWeight={'bold'}
-        style={[styles.cardLabel, !isCard && styles.cardSingleLabel]}>
-        {label.toUpperCase()}
-      </Text>
-      <Text
+        numberOfLines={isFloatingLabel ? undefined : 1}
         fontWeight={!isCard ? 'medium' : 'semiBold'}
         color={plus2ColorKey}
-        style={[!isCard ? styles.cardValueItem : styles.cardValueString]}>
+        style={[
+          !isCard
+            ? isFloatingLabel
+              ? styles.cardValueItemFloating
+              : styles.cardValueItem
+            : styles.cardValueString,
+        ]}>
         {value || '-'}
       </Text>
     </View>

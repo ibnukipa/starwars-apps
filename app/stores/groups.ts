@@ -130,7 +130,11 @@ const useGroupStore = create(
         return false;
       }
 
-      const {getUserIdsByEmails, addGroupIdByEmails, addInvitedGroupIdByEmails} = useUserStore.getState();
+      const {
+        getUserIdsByEmails,
+        addGroupIdByEmails,
+        addInvitedGroupIdByEmails,
+      } = useUserStore.getState();
       const {add: addGroup, groups} = getState();
       let newGroup: Group | null = null;
 

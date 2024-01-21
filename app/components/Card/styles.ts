@@ -24,6 +24,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     overflow: 'hidden',
   },
+  cardContainerFloatingLabel: {
+    overflow: 'visible',
+    marginTop: Spaces.regular,
+  },
   cardSingle: {
     paddingVertical: Spaces.tiny,
   },
@@ -35,12 +39,24 @@ const styles = StyleSheet.create({
   },
   cardValueItem: {
     fontSize: FontSizes.medium,
+    flex: 1,
+    textAlign: 'right',
+  },
+  cardValueItemFloating: {
+    fontSize: FontSizes.medium,
   },
   cardSingleLabel: {
     marginLeft: Spaces.large,
+    alignSelf: 'center',
+    marginRight: Spaces.tiny,
   },
   cardLabel: {
     fontSize: FontSizes.xSmall,
+  },
+  cardFloatingLabel: {
+    position: 'absolute',
+    top: -Spaces.regular,
+    left: Spaces.tiny,
   },
   iconBackground: {
     position: 'absolute',
