@@ -45,7 +45,7 @@ const MemberItemAction: React.FC<{
   >(() => {
     if (isCurrentUserOwner) {
       if (isOwner) {
-        return ['me', 'victoriaBlue'];
+        return ['owner', 'victoriaBlue'];
       } else if (isMember) {
         return ['remove', 'crimsonRed'];
       } else if (isInvited) {
@@ -56,23 +56,31 @@ const MemberItemAction: React.FC<{
     } else {
       if (isOwner) {
         return ['owner', 'victoriaBlue'];
-      } else if (isMember) {
-        return ['member', 'gray'];
-      } else if (isInvited) {
-        return ['invited', 'jadeGreen'];
       }
 
       return [undefined, undefined];
     }
   }, [isCurrentUserOwner, isOwner, isMember, isInvited]);
 
+  const isOwnerCheck = useMemo(() => {
+    return !isCurrentUserOwner || isOwner;
+  }, [isCurrentUserOwner, isOwner]);
+
   const ownerOnPress = useCallback(() => {
     if (isInvited) {
       cancelMember(groupId, memberEmail);
-    } else if (isMember) {
+    } else if (isMember && !isOwner) {
       removeMember(groupId, memberEmail);
     }
-  }, [cancelMember, groupId, isInvited, isMember, memberEmail, removeMember]);
+  }, [
+    cancelMember,
+    groupId,
+    isInvited,
+    isMember,
+    isOwner,
+    memberEmail,
+    removeMember,
+  ]);
 
   if (!buttonTitle) {
     return null;
@@ -81,11 +89,11 @@ const MemberItemAction: React.FC<{
   return (
     <Button
       isLoading={isCancellingMember || isRemovingOrLeavingMember}
-      style={!isCurrentUserOwner && BaseStyle.flexEnd}
-      onPress={isCurrentUserOwner ? ownerOnPress : undefined}
+      style={isOwnerCheck && BaseStyle.flexEnd}
+      onPress={isOwnerCheck ? undefined : ownerOnPress}
       colorScheme={colorScheme}
       variant={ButtonVariant.TERTIARY}
-      size={!isCurrentUserOwner ? ButtonSize.TINY : ButtonSize.SMALL}>
+      size={isOwnerCheck ? ButtonSize.TINY : ButtonSize.SMALL}>
       {buttonTitle}
     </Button>
   );
@@ -104,9 +112,9 @@ const MemberItem: React.FC<MemberItemProps> = ({id, groupId}) => {
     if (isOwner) {
       return 'victoriaBlue';
     } else if (isMember) {
-      return 'gray';
-    } else if (isInvited) {
       return 'jadeGreen';
+    } else if (isInvited) {
+      return 'gray';
     }
 
     return 'gray';
