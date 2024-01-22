@@ -36,14 +36,22 @@ const MemberModal = forwardRef<MemberModal, MemberModalProps>(
 
       const sections = [];
       if (group.invitedMemberIds.length > 0) {
-        sections.push({data: group.invitedMemberIds, key: 'invited member'});
+        const invitedMemberIds = [...group.invitedMemberIds];
+        const currentUserInvitedIndex = invitedMemberIds.findIndex(
+          findId => findId === currentUser?.id,
+        );
+        if (currentUserInvitedIndex > -1 && currentUser) {
+          invitedMemberIds.splice(currentUserInvitedIndex, 1);
+          invitedMemberIds.unshift(currentUser.id);
+        }
+        sections.push({data: invitedMemberIds, key: 'invited member'});
       }
       if (group.memberIds.length > 0) {
         sections.push({data: group.memberIds, key: 'member'});
       }
 
       return sections;
-    }, [group?.memberIds, group?.invitedMemberIds]);
+    }, [group?.memberIds, group?.invitedMemberIds, currentUser?.id]);
 
     const renderItemSeparator = useCallback(() => {
       return <View style={BaseStyle.dividerPlain} />;

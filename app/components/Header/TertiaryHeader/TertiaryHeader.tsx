@@ -1,12 +1,13 @@
 import React from 'react';
-import {BaseStyle} from '../../../styles/base.ts';
-import styles from '../../Modal/GroupModal/styles.ts';
 import {View} from 'react-native';
+
+import {BaseStyle} from '../../../styles/base.ts';
 import {Icon} from '../../Icon';
 import {Text} from '../../Text';
 import {Button, ButtonSize, ButtonVariant} from '../../Button';
 import {IColorSchemes, IIcons} from '../../../constants';
 import {useColorScheme} from '../../../hooks';
+import styles from './styles.ts';
 
 export interface TertiaryHeaderProps {
   icon: IIcons;
@@ -30,7 +31,7 @@ const TertiaryHeader: React.FC<TertiaryHeaderProps> = ({
         BaseStyle.row,
         BaseStyle.verticalCentered,
         BaseStyle.spaceBetween,
-        styles.groupHeader,
+        styles.container,
       ]}>
       <View style={[BaseStyle.row, BaseStyle.verticalCentered]}>
         <Icon style={BaseStyle.padTinyRight} name={icon} color={mainColorKey} />

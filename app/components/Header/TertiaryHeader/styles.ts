@@ -1,8 +1,9 @@
 import {StyleSheet} from 'react-native';
+import {Colors} from '../../../constants';
 
 const styles = StyleSheet.create({
-  groupContainer: {
-    paddingTop: 0,
+  container: {
+    backgroundColor: Colors.neutralWhite,
   },
 });
 

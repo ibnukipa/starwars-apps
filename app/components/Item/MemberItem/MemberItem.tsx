@@ -23,23 +23,38 @@ const MemberItemAction: React.FC<{
   isMember: boolean;
   groupId: string;
   memberEmail: string;
-}> = ({isOwner, isMember, isInvited, ownerId, groupId, memberEmail}) => {
+  memberId: string;
+}> = ({
+  isOwner,
+  isMember,
+  isInvited,
+  ownerId,
+  groupId,
+  memberEmail,
+  memberId,
+}) => {
   const currentUser = useAuthStore(state => state.user);
   const [
     removeMember,
     isRemovingOrLeavingMember,
     cancelMember,
     isCancellingMember,
+    accept,
+    isAccepting,
   ] = useGroupStore(state => [
     state.removeOrLeaveMember,
     state.isRemovingOrLeavingMember,
     state.cancelMember,
     state.isCancellingMember,
+    state.accept,
+    state.isAccepting,
   ]);
   const isCurrentUserOwner = useMemo(() => {
     return ownerId === currentUser?.id;
   }, [ownerId, currentUser?.id]);
-
+  const isCurrentUserMember = useMemo(() => {
+    return memberId === currentUser?.id;
+  }, [currentUser?.id, memberId]);
   const [buttonTitle, colorScheme] = useMemo<
     [string | undefined, IColorSchemes | undefined]
   >(() => {
@@ -56,15 +71,21 @@ const MemberItemAction: React.FC<{
     } else {
       if (isOwner) {
         return ['owner', 'victoriaBlue'];
+      } else if (isInvited && isCurrentUserMember) {
+        return ['accept', 'jadeGreen'];
       }
 
       return [undefined, undefined];
     }
-  }, [isCurrentUserOwner, isOwner, isMember, isInvited]);
+  }, [isCurrentUserOwner, isOwner, isMember, isInvited, isCurrentUserMember]);
 
   const isOwnerCheck = useMemo(() => {
     return !isCurrentUserOwner || isOwner;
   }, [isCurrentUserOwner, isOwner]);
+
+  const isCurrentUserInvited = useMemo(() => {
+    return isInvited && isCurrentUserMember;
+  }, [isCurrentUserMember, isInvited]);
 
   const ownerOnPress = useCallback(() => {
     if (isInvited) {
@@ -82,18 +103,32 @@ const MemberItemAction: React.FC<{
     removeMember,
   ]);
 
+  const currentUserInvitedPress = useCallback(() => {
+    accept(groupId);
+  }, [accept, groupId]);
+
   if (!buttonTitle) {
     return null;
   }
 
   return (
     <Button
-      isLoading={isCancellingMember || isRemovingOrLeavingMember}
+      isLoading={isCancellingMember || isRemovingOrLeavingMember || isAccepting}
       style={isOwnerCheck && BaseStyle.flexEnd}
-      onPress={isOwnerCheck ? undefined : ownerOnPress}
+      onPress={
+        isOwnerCheck
+          ? isCurrentUserInvited
+            ? currentUserInvitedPress
+            : undefined
+          : ownerOnPress
+      }
       colorScheme={colorScheme}
       variant={ButtonVariant.TERTIARY}
-      size={isOwnerCheck ? ButtonSize.TINY : ButtonSize.SMALL}>
+      size={
+        isOwnerCheck && !isCurrentUserInvited
+          ? ButtonSize.TINY
+          : ButtonSize.SMALL
+      }>
       {buttonTitle}
     </Button>
   );
@@ -148,6 +183,7 @@ const MemberItem: React.FC<MemberItemProps> = ({id, groupId}) => {
       </View>
       <MemberItemAction
         groupId={groupId}
+        memberId={member.id}
         memberEmail={member.email}
         ownerId={ownerId}
         isOwner={isOwner}

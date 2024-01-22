@@ -7,6 +7,7 @@ import {showToast} from '../components';
 import {fetchWithTimeout, removeValue} from '../utils';
 import useAuthStore from './auth.ts';
 import useUserStore, {User} from './users.ts';
+import useNotificationStore from './notifications.ts';
 
 export interface Group {
   id: string;
@@ -165,6 +166,7 @@ const useGroupStore = create(
         addGroupIdByEmails,
         addInvitedGroupIdByEmails,
       } = useUserStore.getState();
+      const {groupInvitation} = useNotificationStore.getState();
       const {add: addGroup, groups} = getState();
       let newGroup: Group | null = null;
 
@@ -172,6 +174,9 @@ const useGroupStore = create(
         // in-memory strategy
         const id = String(Object.keys(groups).length + 1);
         const starship = await getStarship(id);
+        const invitedMemberIds = getUserIdsByEmails(
+          groupForm.invitedMemberEmails,
+        );
         newGroup = {
           id,
           name: groupForm.name,
@@ -181,14 +186,20 @@ const useGroupStore = create(
           starWarsProfile: starship || groupForm.starWarsProfile,
           ownerId: owner.id,
           memberIds: [owner.id],
-          invitedMemberIds: getUserIdsByEmails(groupForm.invitedMemberEmails),
+          invitedMemberIds: invitedMemberIds,
         };
 
         if (newGroup) {
           addGroup(newGroup);
+
+          // update user owner
           addGroupIdByEmails([owner.email], newGroup.id);
+
+          // update users
           addInvitedGroupIdByEmails(groupForm.invitedMemberEmails, newGroup.id);
-          // TODO: create in app-notification to invitee
+
+          // notifications
+          groupInvitation(newGroup, invitedMemberIds);
         }
       } else {
         // TODO: proceed the API response
@@ -254,7 +265,6 @@ const useGroupStore = create(
     },
     // TODO: add reject functionality
     reject: () => {},
-    // TODO: add remove member functionality
     removeOrLeaveMember: async (groupId: string, userEmail?: string) => {
       setState({isRemovingOrLeavingMember: true});
       const group = getState().groups[groupId];
@@ -316,20 +326,27 @@ const useGroupStore = create(
       let invitedMember = [];
       if (!response || !response.ok) {
         // in-memory strategy
-        const {addInvitedMemberIds} = getState();
+        const {addInvitedMemberIds, groups} = getState();
         const {addInvitedGroupIdByEmails, getUserIdsByEmails} =
           useUserStore.getState();
+        const {groupInvitation} = useNotificationStore.getState();
         if (inviteGroupMemberForm) {
-          const userIds = getUserIdsByEmails(
+          const invitedMemberIds = getUserIdsByEmails(
             inviteGroupMemberForm.invitedMemberEmails,
           );
 
+          addInvitedMemberIds(groupId, invitedMemberIds);
+
+          // update users relation
           addInvitedGroupIdByEmails(
             inviteGroupMemberForm.invitedMemberEmails,
             groupId,
           );
-          addInvitedMemberIds(groupId, userIds);
-          invitedMember = userIds;
+
+          // notifications
+          groupInvitation(groups[groupId], invitedMemberIds);
+
+          invitedMember = invitedMemberIds;
           // TODO: create in app-notification to invitee
         }
       } else {

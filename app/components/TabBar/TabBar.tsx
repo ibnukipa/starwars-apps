@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {Image, Pressable} from 'react-native';
+import {Image, Pressable, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 
@@ -8,6 +8,7 @@ import {Icon, IconSize} from '../Icon';
 import {IColors, Icons, IIcons} from '../../constants';
 import Text from '../Text/Text.tsx';
 import {BaseStyle} from '../../styles/base.ts';
+import {useAuthStore, useNotificationStore} from '../../stores';
 
 const TabBarItem: React.FC<
   BottomTabBarProps & {
@@ -15,6 +16,15 @@ const TabBarItem: React.FC<
     route: BottomTabBarProps['state']['routes'][0];
   }
 > = ({state, navigation, route, index}) => {
+  const currenUserId = useAuthStore(authSate => authSate.user?.id);
+  const notificationLength = useNotificationStore(notificationState => {
+    if (currenUserId) {
+      return notificationState.notificationLength[currenUserId];
+    } else {
+      return 0;
+    }
+  });
+
   const [isPressing, setIsPressing] = useState(false);
 
   const isFocused = useMemo(() => {
@@ -93,6 +103,13 @@ const TabBarItem: React.FC<
       onPressOut={onPressOut}>
       <SafeAreaView style={styles.item} edges={['bottom']}>
         <Icon isDisabled color={iconColor} size={IconSize.HUGE} name={icon} />
+        {notificationLength > 0 && route.name === 'Notification' ? (
+          <View style={styles.indicatorContainer}>
+            <Text bold color={'neutralWhite'}>
+              {notificationLength > 9 ? '9+' : notificationLength}
+            </Text>
+          </View>
+        ) : null}
         <Text bold color={iconColor}>
           {label?.toUpperCase()}
         </Text>

@@ -24,6 +24,19 @@ const styles = StyleSheet.create({
     aspectRatio: 1200 / 572,
     tintColor: Colors.victoriaBlue,
   },
+  indicatorContainer: {
+    position: 'absolute',
+    backgroundColor: Colors.crimsonRed,
+    top: '20%',
+    right: '40%',
+    width: 22,
+    height: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: Radii.full,
+    borderColor: Colors.neutralWhite,
+    borderWidth: 2,
+  },
 });
 
 export default styles;
