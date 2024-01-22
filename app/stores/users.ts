@@ -2,7 +2,6 @@ import {create} from 'zustand';
 import {immer} from 'zustand/middleware/immer';
 
 import {People, searchPeopleApi} from '../apis';
-import {userSeed} from './seed';
 import {removeValue} from '../utils';
 
 export interface User {
@@ -52,7 +51,7 @@ interface UserActions {
 
 const useUserStore = create(
   immer<UserState & UserActions>((setState, getState) => ({
-    users: userSeed,
+    users: {},
 
     add: user => {
       setState(state => {

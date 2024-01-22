@@ -58,13 +58,17 @@ The drawback is this navigation library wasn't implemented from native at first 
 A small, fast and scalable bearbones state-management solution using simplified flux principles. Has a comfy API based on hooks, isn't boilerplatey or opinionated.
 
 ## Improvements
-- 
-
-## Production
-- Create .env based on release / build variant.
-- Need to handle certificates for each store.
-- Provide banners for stores
-- Enable proguard if needed
+- Error Handling
+- Form Validation
+- Divider Component
+- Local Database
+- Encrypt Password
+- Forgot Password
+- i18n and l10n
+- Member Search
+- Group Search
+- Remove Group
+- Last Location
 
 ## Assumptions
 - 
