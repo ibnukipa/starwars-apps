@@ -2,7 +2,7 @@ import {getStarship, Starship} from '../apis';
 import {create} from 'zustand';
 import {immer} from 'zustand/middleware/immer';
 
-import {CreateGroupForm} from '../forms';
+import {CreateGroupForm, InviteGroupMemberForm} from '../forms';
 import {showToast} from '../components';
 import {fetchWithTimeout, removeValue} from '../utils';
 import useAuthStore from './auth.ts';
@@ -30,6 +30,8 @@ interface GroupState {
   isCreating: boolean;
   isAccepting: boolean;
   isRemovingOrLeavingMember: boolean;
+  isInvitingMember: boolean;
+  isCancellingMember: boolean;
 }
 
 interface GroupActions {
@@ -37,18 +39,23 @@ interface GroupActions {
   add: (group: Group) => void;
   addMemberId: (groupId: string, userId: string) => void;
   removeMemberId: (groupId: string, userId: string) => void;
-  addInvitedMemberId: (groupId: string, userId: string) => void;
+  addInvitedMemberIds: (groupId: string, userIds: Array<string>) => void;
+  removeInvitedMemberId: (groupId: string, userId: string) => void;
   getFlattenGroups: () => Array<Group>;
 
   // side effect operations / state manipulation
   create: (groupForm: CreateGroupForm) => Promise<boolean>;
   accept: (groupId: string) => Promise<boolean>;
   reject: () => void;
-  leave: () => void;
   removeOrLeaveMember: (groupId: string, userId?: string) => Promise<boolean>;
-  getIsOwner: (group: Group) => boolean;
-  getIsInvited: (group: Group) => boolean;
-  getIsMember: (group: Group) => boolean;
+  inviteMember: (
+    groupId: string,
+    inviteGroupMemberForm: InviteGroupMemberForm,
+  ) => Promise<boolean>;
+  cancelMember: (groupId: string, userId?: string) => Promise<boolean>;
+  getIsOwner: (group: Group, user?: User) => boolean;
+  getIsInvited: (group: Group, user?: User) => boolean;
+  getIsMember: (group: Group, user?: User) => boolean;
 
   // API calls
   fetchStarWarStarshipById: (id: string) => Promise<Starship | null>;
@@ -61,6 +68,8 @@ const useGroupStore = create(
     isCreating: false,
     isAccepting: false,
     isRemovingOrLeavingMember: false,
+    isInvitingMember: false,
+    isCancellingMember: false,
 
     add: group => {
       setState(state => {
@@ -71,29 +80,50 @@ const useGroupStore = create(
     },
     addMemberId: (groupId, userId) => {
       setState(state => {
-        state.groups[groupId].memberIds.push(userId);
+        if (state.groups[groupId]) {
+          state.groups[groupId].memberIds.push(userId);
 
-        // remove invited memberId
-        const invitedMemberIds = state.groups[groupId].invitedMemberIds;
-        state.groups[groupId].invitedMemberIds = removeValue(
-          invitedMemberIds,
-          userId,
-        );
+          // remove invited memberId
+          const invitedMemberIds = state.groups[groupId].invitedMemberIds;
+          state.groups[groupId].invitedMemberIds = removeValue(
+            invitedMemberIds,
+            userId,
+          );
+        }
 
         return state;
       });
     },
     removeMemberId: (groupId, userId) => {
       setState(state => {
-        const memberIds = state.groups[groupId].memberIds;
-        state.groups[groupId].memberIds = removeValue(memberIds, userId);
+        if (state.groups[groupId]) {
+          const memberIds = state.groups[groupId].memberIds;
+          state.groups[groupId].memberIds = removeValue(memberIds, userId);
+        }
 
         return state;
       });
     },
-    addInvitedMemberId: (groupId, userId) => {
+    addInvitedMemberIds: (groupId, userIds) => {
       setState(state => {
-        state.groups[groupId].invitedMemberIds.push(userId);
+        userIds.forEach(userId => {
+          if (state.groups[groupId]) {
+            state.groups[groupId].invitedMemberIds.push(userId);
+          }
+        });
+
+        return state;
+      });
+    },
+    removeInvitedMemberId: (groupId, userId) => {
+      setState(state => {
+        if (state.groups[groupId]) {
+          const invitedMemberIds = state.groups[groupId].invitedMemberIds;
+          state.groups[groupId].invitedMemberIds = removeValue(
+            invitedMemberIds,
+            userId,
+          );
+        }
 
         return state;
       });
@@ -148,7 +178,7 @@ const useGroupStore = create(
           description: groupForm.description,
           avatar: groupForm.avatar,
           nameAlias: groupForm.nameAlias,
-          starWarsProfile: starship,
+          starWarsProfile: starship || groupForm.starWarsProfile,
           ownerId: owner.id,
           memberIds: [owner.id],
           invitedMemberIds: getUserIdsByEmails(groupForm.invitedMemberEmails),
@@ -224,8 +254,6 @@ const useGroupStore = create(
     },
     // TODO: add reject functionality
     reject: () => {},
-    // TODO: add leave functionality
-    leave: () => {},
     // TODO: add remove member functionality
     removeOrLeaveMember: async (groupId: string, userEmail?: string) => {
       setState({isRemovingOrLeavingMember: true});
@@ -241,7 +269,7 @@ const useGroupStore = create(
 
       // call API
       const response = await fetchWithTimeout(
-        'https://localhost:8080/accept-group',
+        'https://localhost:8080/remove-or-leave-group',
         {
           method: 'post',
         },
@@ -274,26 +302,118 @@ const useGroupStore = create(
       });
       return true;
     },
-    getIsOwner: (group: Group) => {
-      const currentUser = useAuthStore.getState().user;
+    inviteMember: async (groupId, inviteGroupMemberForm) => {
+      setState({isInvitingMember: true});
 
-      return group.ownerId === currentUser?.id;
+      // call API
+      const response = await fetchWithTimeout(
+        'https://localhost:8080/remove-or-leave-group',
+        {
+          method: 'post',
+        },
+      );
+
+      let invitedMember = [];
+      if (!response || !response.ok) {
+        // in-memory strategy
+        const {addInvitedMemberIds} = getState();
+        const {addInvitedGroupIdByEmails, getUserIdsByEmails} =
+          useUserStore.getState();
+        if (inviteGroupMemberForm) {
+          const userIds = getUserIdsByEmails(
+            inviteGroupMemberForm.invitedMemberEmails,
+          );
+
+          addInvitedGroupIdByEmails(
+            inviteGroupMemberForm.invitedMemberEmails,
+            groupId,
+          );
+          addInvitedMemberIds(groupId, userIds);
+          invitedMember = userIds;
+          // TODO: create in app-notification to invitee
+        }
+      } else {
+        // TODO: proceed the API response object
+      }
+
+      const {updateUser} = useAuthStore.getState();
+
+      setState({isInvitingMember: false});
+      updateUser();
+      showToast({
+        title: 'Success',
+        message: `Invited new member in total ${invitedMember.length}`,
+        colorScheme: 'jadeGreen',
+      });
+      return true;
     },
-    getIsMember: (group: Group) => {
-      const currentUser = useAuthStore.getState().user;
+    cancelMember: async (groupId: string, userEmail?: string) => {
+      setState({isCancellingMember: true});
+      const group = getState().groups[groupId];
+      if (!group) {
+        showToast({
+          message: 'The group does not exist anymore',
+          colorScheme: 'crimsonRed',
+        });
+        setState({isCancellingMember: false});
+        return false;
+      }
+
+      // call API
+      const response = await fetchWithTimeout(
+        'https://localhost:8080/cancel-group-member',
+        {
+          method: 'post',
+        },
+      );
+
+      const {user: currentUser, updateUser} = useAuthStore.getState();
+      let user: User | null = null;
+
+      if (!response || !response.ok) {
+        // in-memory strategy
+        const {users, removeInvitedGroupId} = useUserStore.getState();
+        const {removeInvitedMemberId} = getState();
+        user = userEmail ? users[userEmail] : currentUser;
+
+        if (user) {
+          removeInvitedMemberId(groupId, user.id);
+          removeInvitedGroupId(user.email, groupId);
+        }
+      } else {
+        // TODO: proceed the API response object
+      }
+
+      setState({isCancellingMember: false});
+      updateUser();
+      // TODO: optionally create notification to member
+      showToast({
+        title: 'Success',
+        message: `Cenceled ${user?.firstName} from group ${group.name}`,
+        colorScheme: 'jadeGreen',
+      });
+      return true;
+    },
+    getIsOwner: (group, user) => {
+      const currentUser = user || useAuthStore.getState().user;
+
+      return group?.ownerId === currentUser?.id;
+    },
+    getIsMember: (group, user) => {
+      const currentUser = user || useAuthStore.getState().user;
       if (!currentUser) {
         return false;
       }
 
-      return group.memberIds.includes(currentUser.id);
+      return group?.memberIds.includes(currentUser.id);
     },
-    getIsInvited: (group: Group) => {
-      const currentUser = useAuthStore.getState().user;
+    getIsInvited: (group, user) => {
+      const currentUser = user || useAuthStore.getState().user;
       if (!currentUser) {
         return false;
       }
 
-      return group.invitedMemberIds.includes(currentUser.id);
+      return group?.invitedMemberIds.includes(currentUser.id);
     },
 
     fetchStarWarStarshipById: () => {

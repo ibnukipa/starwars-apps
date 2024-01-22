@@ -1,5 +1,11 @@
 import React, {memo, useMemo} from 'react';
-import {TextInput, View, TextInputProps, ViewProps} from 'react-native';
+import {
+  TextInput as RNTextInput,
+  View,
+  TextInputProps,
+  ViewProps,
+} from 'react-native';
+import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 
 import {BaseStyle} from '../../../styles/base.ts';
 import {FontFamilyStyle, Text} from '../../Text';
@@ -17,6 +23,7 @@ export interface InputTextProps extends TextInputProps {
   isDisabled?: boolean;
   wrapperStyle?: ViewProps['style'];
   isFloatingLabel?: boolean;
+  isBottomSheet?: boolean;
 }
 
 const InputText: React.FC<InputTextProps> = ({
@@ -26,8 +33,12 @@ const InputText: React.FC<InputTextProps> = ({
   multiline,
   wrapperStyle,
   isFloatingLabel: isFloatingLabelProps,
+  isBottomSheet,
   ...props
 }) => {
+  const TextInput = useMemo(() => {
+    return isBottomSheet ? BottomSheetTextInput : RNTextInput;
+  }, [isBottomSheet]);
   const [textInputContainerStyle, textInputStyle, textInputMultilineStyle] =
     useMemo(() => {
       switch (size) {

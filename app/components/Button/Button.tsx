@@ -56,12 +56,12 @@ const Button: React.FC<ButtonProps> = ({
   const [isPressing, setIsPressing] = useState(false);
 
   const onPressIn = useCallback(() => {
-    setIsPressing(true);
-  }, []);
+    onPress && setIsPressing(true);
+  }, [onPress]);
 
   const onPressOut = useCallback(() => {
-    setIsPressing(false);
-  }, []);
+    onPress && setIsPressing(false);
+  }, [onPress]);
 
   const Children = useMemo(() => {
     if (typeof children === 'string') {

@@ -1,19 +1,18 @@
 import React, {forwardRef, useCallback, useMemo} from 'react';
-import {View} from 'react-native';
-import {BottomSheetFlatList} from '@gorhom/bottom-sheet';
+import {SectionListProps, View} from 'react-native';
+import {BottomSheetSectionList} from '@gorhom/bottom-sheet';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 
 import {BaseStyle} from '../../../styles/base.ts';
-import {Icon} from '../../Icon';
 import {Text} from '../../Text';
-import {Button, ButtonSize, ButtonVariant} from '../../Button';
-import {ItemGroup} from '../../ItemGroup';
+import {GroupItem} from '../../Item';
 import {BottomSheet} from '../../BottomSheet';
 import styles from './styles.ts';
 import {RootStackParamList} from '../../../routes/types.ts';
 import {useAuthStore} from '../../../stores';
+import {SectionHeader, TertiaryHeader} from '../../Header';
 
 export interface GroupModalProps {
   isHasBottomTabBar?: boolean;
@@ -28,11 +27,32 @@ const GroupModal = forwardRef<GroupModal, GroupModalProps>(
 
     const [currentUser] = useAuthStore(state => [state.user]);
 
-    const mergedGroupIds = useMemo(() => {
-      return [
-        ...(currentUser?.invitedGroupIds || []),
-        ...(currentUser?.groupIds || []),
-      ];
+    const mergedGroupIds = useMemo<SectionListProps<string>['sections']>(() => {
+      if (
+        currentUser?.invitedGroupIds &&
+        currentUser?.invitedGroupIds.length < 1 &&
+        currentUser?.groupIds &&
+        currentUser?.groupIds.length < 1
+      ) {
+        return [];
+      }
+      const sections = [];
+
+      if (
+        currentUser?.invitedGroupIds &&
+        currentUser?.invitedGroupIds.length > 0
+      ) {
+        sections.push({
+          data: currentUser.invitedGroupIds,
+          key: 'invited group',
+        });
+      }
+
+      if (currentUser?.groupIds && currentUser?.groupIds.length > 0) {
+        sections.push({data: currentUser.groupIds, key: 'group'});
+      }
+
+      return sections;
     }, [currentUser?.groupIds, currentUser?.invitedGroupIds]);
 
     const renderItemSeparator = useCallback(() => {
@@ -40,7 +60,11 @@ const GroupModal = forwardRef<GroupModal, GroupModalProps>(
     }, []);
 
     const renderItem = useCallback(({item}: {item: string}) => {
-      return <ItemGroup id={item} />;
+      return <GroupItem id={item} />;
+    }, []);
+
+    const renderSectionHeader = useCallback(({section}: any) => {
+      return <SectionHeader title={section.key} />;
     }, []);
 
     const navigateToGroupRegistration = useCallback(() => {
@@ -56,45 +80,29 @@ const GroupModal = forwardRef<GroupModal, GroupModalProps>(
         enablePanDownToClose={false}
         enableDynamicSizing={false}
         snapPoints={['30%', '75%']}>
-        <BottomSheetFlatList
-          stickyHeaderIndices={[0]}
+        <View
+          style={[
+            BaseStyle.pad,
+            styles.groupContainer,
+            BaseStyle.noPaddingBottom,
+          ]}>
+          <TertiaryHeader
+            colorScheme={'radiantOrchid'}
+            title={'Group'}
+            icon={'usersGroup'}
+            buttonTitle={'Create group'}
+            buttonOnPress={navigateToGroupRegistration}
+          />
+        </View>
+        <BottomSheetSectionList
           contentContainerStyle={[
             BaseStyle.pad,
             styles.groupContainer,
             {paddingBottom: isHasBottomTabBar ? tabBarHeight : undefined},
           ]}
-          ListHeaderComponent={
-            <View
-              style={[
-                BaseStyle.row,
-                BaseStyle.verticalCentered,
-                BaseStyle.spaceBetween,
-                styles.groupHeader,
-              ]}>
-              <View style={[BaseStyle.row, BaseStyle.verticalCentered]}>
-                <Icon
-                  style={BaseStyle.padTinyRight}
-                  name={'usersGroup'}
-                  color={'radiantOrchid'}
-                />
-                <Text
-                  fontWeight={'medium'}
-                  color={'radiantOrchid'}
-                  style={[BaseStyle.heading4, BaseStyle.textUppercase]}>
-                  Group
-                </Text>
-              </View>
-              <Button
-                onPress={navigateToGroupRegistration}
-                colorScheme={'radiantOrchid'}
-                variant={ButtonVariant.TERTIARY}
-                size={ButtonSize.XSMALL}>
-                Create group
-              </Button>
-            </View>
-          }
-          data={mergedGroupIds}
+          sections={mergedGroupIds}
           renderItem={renderItem}
+          renderSectionHeader={renderSectionHeader}
           ItemSeparatorComponent={renderItemSeparator}
           ListFooterComponent={
             <SafeAreaView edges={['bottom', 'left', 'right']} />

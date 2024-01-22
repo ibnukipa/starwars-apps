@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -14,15 +14,23 @@ export interface SecondaryHeaderProps {
   title: string;
   avatar?: string;
   colorScheme?: IColorSchemes;
+  onClosePress?: () => void;
+  hasNoPaddingTop?: boolean;
 }
 
 const SecondaryHeader: React.FC<SecondaryHeaderProps> = ({
   title,
   avatar,
   colorScheme = 'citrusYellow',
+  onClosePress: onClosePressProps,
+  hasNoPaddingTop,
 }) => {
   const navigation = useNavigation();
   const {mainColorKey} = useColorScheme(colorScheme);
+
+  const onClosePress = useCallback(() => {
+    onClosePressProps ? onClosePressProps() : navigation.goBack();
+  }, [onClosePressProps, navigation]);
 
   return (
     <View
@@ -32,6 +40,7 @@ const SecondaryHeader: React.FC<SecondaryHeaderProps> = ({
         BaseStyle.headerContainer,
         BaseStyle.pad,
         styles.titleContainer,
+        hasNoPaddingTop && BaseStyle.noPaddingTop,
       ]}>
       {avatar && (
         <View style={BaseStyle.padTinyRight}>
@@ -48,7 +57,7 @@ const SecondaryHeader: React.FC<SecondaryHeaderProps> = ({
         color={mainColorKey}
         name={'close'}
         size={IconSize.HUGE}
-        onPress={navigation.goBack}
+        onPress={onClosePress}
       />
     </View>
   );

@@ -1,22 +1,22 @@
 import React, {useCallback, useMemo} from 'react';
 import {View} from 'react-native';
 
-import {BaseStyle} from '../../styles/base.ts';
-import {Text} from '../Text';
+import {BaseStyle} from '../../../styles/base.ts';
+import {Text} from '../../Text';
 import styles from './styles.ts';
-import {Avatar, AvatarSize} from '../Avatar';
-import {Button, ButtonSize, ButtonVariant} from '../Button';
-import {IColorSchemes} from '../../constants';
-import {useColorScheme} from '../../hooks';
-import useGroupStore from '../../stores/groups.ts';
+import {Avatar, AvatarSize} from '../../Avatar';
+import {Button, ButtonSize, ButtonVariant} from '../../Button';
+import {IColorSchemes} from '../../../constants';
+import {useColorScheme, useMemberStatusInGroup} from '../../../hooks';
+import useGroupStore from '../../../stores/groups.ts';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {RootStackParamList} from '../../routes/types.ts';
+import {RootStackParamList} from '../../../routes/types.ts';
 
-export interface ItemGroupProps {
+export interface GroupItemProps {
   id: string;
 }
 
-const ItemGroupAction: React.FC<{
+const GroupItemAction: React.FC<{
   groupId: string;
   isOwner: boolean;
   isInvited: boolean;
@@ -85,20 +85,8 @@ const ItemGroupAction: React.FC<{
   );
 };
 
-const ItemGroup: React.FC<ItemGroupProps> = ({id}) => {
-  const [getIsOwner, getIsMember, getIsInvited, group] = useGroupStore(
-    state => [
-      state.getIsOwner,
-      state.getIsMember,
-      state.getIsInvited,
-      state.groups[id],
-    ],
-  );
-
-  const isOwner = useMemo(() => getIsOwner(group), [getIsOwner, group]);
-  const isMember = useMemo(() => getIsMember(group), [getIsMember, group]);
-  const isInvited = useMemo(() => getIsInvited(group), [getIsInvited, group]);
-
+const GroupItem: React.FC<GroupItemProps> = ({id}) => {
+  const {isOwner, isMember, isInvited, group} = useMemberStatusInGroup(id);
   const colorScheme = useMemo<IColorSchemes>(() => {
     if (isOwner) {
       return 'radiantOrchid';
@@ -144,7 +132,7 @@ const ItemGroup: React.FC<ItemGroupProps> = ({id}) => {
           )}
         </View>
       </View>
-      <ItemGroupAction
+      <GroupItemAction
         groupId={group.id}
         isOwner={isOwner}
         isInvited={isInvited}
@@ -154,4 +142,4 @@ const ItemGroup: React.FC<ItemGroupProps> = ({id}) => {
   );
 };
 
-export default ItemGroup;
+export default GroupItem;

@@ -8,11 +8,13 @@ import {generateUUID} from '../../../utils';
 export interface InputTextMultipleProps {
   onChangeText: (value: string) => void;
   isDisabled?: boolean;
+  isBottomSheet?: boolean;
 }
 
 const InputTextMultiple: React.FC<InputTextMultipleProps> = ({
   onChangeText,
   isDisabled,
+  isBottomSheet,
 }) => {
   const [inputs, setInputs] = useState<Array<string>>([generateUUID()]);
 
@@ -59,6 +61,7 @@ const InputTextMultiple: React.FC<InputTextMultipleProps> = ({
               wrapperStyle={BaseStyle.noMarginBottom}
               autoCapitalize={'none'}
               autoCorrect={false}
+              isBottomSheet={isBottomSheet}
             />
           </View>
           <View style={BaseStyle.dividerVertical} />
@@ -76,7 +79,7 @@ const InputTextMultiple: React.FC<InputTextMultipleProps> = ({
         </View>
       );
     },
-    [remove, inputs.length, onChangeEmail, isDisabled],
+    [remove, inputs.length, onChangeEmail, isDisabled, isBottomSheet],
   );
 
   return (

@@ -11,6 +11,7 @@ export enum AvatarSize {
   REGULAR,
   SMALL,
   LARGE,
+  TINY,
 }
 
 export interface AvatarProps {
@@ -38,6 +39,8 @@ const Avatar: React.FC<AvatarProps> = ({
         return [styles.large, IconSize.LARGE];
       case AvatarSize.SMALL:
         return [styles.small, IconSize.TINY];
+      case AvatarSize.TINY:
+        return [styles.tiny, IconSize.TINY];
       case AvatarSize.REGULAR:
       default:
         return [styles.regular, IconSize.REGULAR];

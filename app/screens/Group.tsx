@@ -1,14 +1,15 @@
-import React, {useMemo} from 'react';
-import {ScrollView, StatusBar, StyleSheet} from 'react-native';
+import React, {useCallback, useMemo, useRef} from 'react';
+import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {BaseStyle} from '../styles/base.ts';
-import {Colors, IColorSchemes, Spaces} from '../constants';
+import {Colors, IColorSchemes} from '../constants';
 import {
   Card,
   CardContent,
   CardContentProps,
-  KeyboardAvoidingView,
+  InviteGroupMemberModal,
+  MemberModal,
   SecondaryHeader,
 } from '../components';
 import {StackScreenProps} from '@react-navigation/stack';
@@ -21,9 +22,14 @@ const COLOR_SCHEME: IColorSchemes = 'radiantOrchid';
 const Group: React.FC<StackScreenProps<RootStackParamList, 'Group'>> = ({
   route,
 }) => {
+  const inviteGroupMemberModalRef = useRef<InviteGroupMemberModal>(null);
   const groupId = useMemo(() => route.params.id, [route.params.id]);
 
   const group = useGroupStore(state => state.groups[groupId]);
+
+  const invitePress = useCallback(() => {
+    inviteGroupMemberModalRef.current?.snapToIndex(0);
+  }, []);
 
   const contents = useMemo<CardContentProps['contents']>(() => {
     return [
@@ -112,32 +118,35 @@ const Group: React.FC<StackScreenProps<RootStackParamList, 'Group'>> = ({
         barStyle={'dark-content'}
         backgroundColor={Colors.neutralWhite}
       />
-      <KeyboardAvoidingView style={BaseStyle.flex}>
-        <SecondaryHeader
-          colorScheme={COLOR_SCHEME}
-          avatar={group.avatar}
-          title={group.name}
-        />
-        <ScrollView
-          style={BaseStyle.containerSecondary}
-          keyboardShouldPersistTaps={'handled'}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={[BaseStyle.pad, styles.contentContainer]}>
-          <SafeAreaView edges={['bottom']}>
-            <Card>
-              <CardContent contents={contents} />
-            </Card>
-          </SafeAreaView>
-        </ScrollView>
-      </KeyboardAvoidingView>
+      <SecondaryHeader
+        colorScheme={COLOR_SCHEME}
+        avatar={group.avatar}
+        title={group.name}
+      />
+      <ScrollView
+        style={BaseStyle.containerSecondary}
+        keyboardShouldPersistTaps={'handled'}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[BaseStyle.pad, styles.contentContainer]}>
+        <SafeAreaView edges={['bottom']}>
+          <Card>
+            <CardContent contents={contents} />
+          </Card>
+          <View style={BaseStyle.dividerPlain} />
+        </SafeAreaView>
+      </ScrollView>
+      <MemberModal invitePress={invitePress} groupId={groupId} />
+      <InviteGroupMemberModal
+        ref={inviteGroupMemberModalRef}
+        groupId={groupId}
+      />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   contentContainer: {
-    paddingBottom: Spaces.presentationModal,
-    flex: 1,
+    paddingBottom: '50%',
   },
 });
 

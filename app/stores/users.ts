@@ -37,6 +37,7 @@ interface UserActions {
     emails: Array<User['email']>,
     groupId: string,
   ) => void;
+  removeInvitedGroupId: (email: User['email'], groupId: string) => void;
   getUserIdsByEmails: (emails: Array<User['email']>) => Array<User['id']>;
 
   // side effect operations / state manipulation
@@ -66,22 +67,26 @@ const useUserStore = create(
     },
     addGroupId: (email, groupId) => {
       setState(state => {
-        state.users[email].groupIds.push(groupId);
+        if (state.users[email]) {
+          state.users[email].groupIds.push(groupId);
 
-        // remove invited groupId
-        const invitedGroupIds = state.users[email].invitedGroupIds;
-        state.users[email].invitedGroupIds = removeValue(
-          invitedGroupIds,
-          groupId,
-        );
+          // remove invited groupId
+          const invitedGroupIds = state.users[email].invitedGroupIds;
+          state.users[email].invitedGroupIds = removeValue(
+            invitedGroupIds,
+            groupId,
+          );
+        }
 
         return state;
       });
     },
     removeGroupId: (email, groupId) => {
       setState(state => {
-        const groupIds = state.users[email].groupIds;
-        state.users[email].groupIds = removeValue(groupIds, groupId);
+        if (state.users[email]) {
+          const groupIds = state.users[email].groupIds;
+          state.users[email].groupIds = removeValue(groupIds, groupId);
+        }
 
         return state;
       });
@@ -94,7 +99,9 @@ const useUserStore = create(
     },
     addInvitedGroupId: (email, groupId) => {
       setState(state => {
-        state.users[email].invitedGroupIds.push(groupId);
+        if (state.users[email]) {
+          state.users[email].invitedGroupIds.push(groupId);
+        }
 
         return state;
       });
@@ -113,6 +120,19 @@ const useUserStore = create(
         }
         return ids;
       }, []);
+    },
+    removeInvitedGroupId: (email, groupId) => {
+      setState(state => {
+        if (state.users[email]) {
+          const invitedGroupIds = state.users[email].invitedGroupIds;
+          state.users[email].invitedGroupIds = removeValue(
+            invitedGroupIds,
+            groupId,
+          );
+        }
+
+        return state;
+      });
     },
 
     verifyPassword: (email, password) => {

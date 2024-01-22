@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {FontSizes, Radii, Spaces} from '../../constants';
+import {FontSizes, Radii, Spaces} from '../../../constants';
 
 const styles = StyleSheet.create({
   group: {

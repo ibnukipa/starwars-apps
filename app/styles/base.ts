@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {Colors, FontSizes, Spaces} from '../constants';
+import { Colors, FontSizes, Radii, Spaces } from "../constants";
 
 export const BaseStyle = StyleSheet.create({
   container: {
@@ -16,6 +16,9 @@ export const BaseStyle = StyleSheet.create({
   pad: {
     padding: Spaces.regular,
   },
+  padSmall: {
+    padding: Spaces.small,
+  },
   padTiny: {
     padding: Spaces.tiny,
   },
@@ -30,6 +33,9 @@ export const BaseStyle = StyleSheet.create({
   },
   padTinyTop: {
     paddingTop: Spaces.tiny,
+  },
+  padTinyBottom: {
+    paddingBottom: Spaces.tiny,
   },
   marginTop: {
     marginTop: Spaces.regular,
@@ -80,6 +86,12 @@ export const BaseStyle = StyleSheet.create({
   noMarginBottom: {
     marginBottom: 0,
   },
+  noPaddingTop: {
+    paddingTop: 0,
+  },
+  noPaddingBottom: {
+    paddingBottom: 0,
+  },
   spaceBetween: {
     justifyContent: 'space-between',
   },
@@ -95,6 +107,9 @@ export const BaseStyle = StyleSheet.create({
     borderColor: Colors.neutralBorder,
   },
   shadowFaceUp: {
+    backgroundColor: Colors.neutralWhite,
+    borderTopEndRadius: Radii.large,
+    borderTopStartRadius: Radii.large,
     borderColor: Colors.neutralBorder,
     shadowColor: Colors.neutralText,
     shadowOffset: {
@@ -127,6 +142,7 @@ export const BaseStyle = StyleSheet.create({
     backgroundColor: Colors.citrusYellowPlus1,
     height: '100%',
   },
-  // TODO List
-  listEmptyContainer: {},
+  listEmptyContainer: {
+    paddingTop: Spaces.regular,
+  },
 });

@@ -25,6 +25,10 @@ const styles = StyleSheet.create({
     height: 92,
     width: 92,
   },
+  tiny: {
+    height: 38,
+    width: 38,
+  },
   avatarAlias: {
     fontSize: FontSizes.large,
   },

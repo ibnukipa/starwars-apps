@@ -6,7 +6,7 @@ export * from './Icon';
 export * from './Input';
 export * from './Avatar';
 export * from './BottomSheet';
-export * from './ItemGroup';
+export * from './Item';
 export * from './Card';
 export * from './TabBar';
 export * from './Modal';

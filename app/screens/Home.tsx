@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {StatusBar, StyleSheet, View} from 'react-native';
+import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 
@@ -103,16 +103,17 @@ const Home: React.FC<BottomTabScreenProps<HomeTabParamList, 'Home'>> = () => {
   }, [user]);
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={[BaseStyle.containerSecondary]}>
+    <SafeAreaView edges={['left', 'right']} style={[BaseStyle.container]}>
       <StatusBar
         barStyle={'dark-content'}
         backgroundColor={Colors.neutralContainer}
       />
-      <SafeAreaView edges={['top', 'bottom']} style={BaseStyle.pad}>
+      <SafeAreaView
+        edges={['top', 'bottom']}
+        style={[BaseStyle.containerSecondary]}>
         <View
           style={[
+            BaseStyle.pad,
             BaseStyle.row,
             BaseStyle.verticalCentered,
             BaseStyle.spaceBetween,
@@ -135,29 +136,34 @@ const Home: React.FC<BottomTabScreenProps<HomeTabParamList, 'Home'>> = () => {
             placeholder={user?.nameAlias}
           />
         </View>
-        <View style={BaseStyle.dividerPlain} />
-        <Card>
-          <CardContent contents={contents} />
-        </Card>
-        <View style={BaseStyle.dividerPlain} />
-        <Card>
-          <View
-            style={[
-              BaseStyle.spaceBetween,
-              BaseStyle.padTinyX,
-              BaseStyle.row,
-              BaseStyle.verticalCentered,
-            ]}>
-            <Text>v1.0.0</Text>
-            <Button
-              variant={ButtonVariant.PRIMARY}
-              colorScheme={'crimsonRed'}
-              size={ButtonSize.TINY}
-              onPress={signOutPress}>
-              Logout
-            </Button>
-          </View>
-        </Card>
+        <ScrollView
+          style={BaseStyle.containerSecondary}
+          keyboardShouldPersistTaps={'handled'}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[BaseStyle.pad, styles.contentContainer]}>
+          <Card>
+            <CardContent contents={contents} />
+          </Card>
+          <View style={BaseStyle.dividerPlain} />
+          <Card>
+            <View
+              style={[
+                BaseStyle.spaceBetween,
+                BaseStyle.padTinyX,
+                BaseStyle.row,
+                BaseStyle.verticalCentered,
+              ]}>
+              <Text>v1.0.0</Text>
+              <Button
+                variant={ButtonVariant.PRIMARY}
+                colorScheme={'crimsonRed'}
+                size={ButtonSize.TINY}
+                onPress={signOutPress}>
+                Logout
+              </Button>
+            </View>
+          </Card>
+        </ScrollView>
       </SafeAreaView>
       <GroupModal />
     </SafeAreaView>
@@ -165,6 +171,9 @@ const Home: React.FC<BottomTabScreenProps<HomeTabParamList, 'Home'>> = () => {
 };
 
 const styles = StyleSheet.create({
+  contentContainer: {
+    paddingBottom: '60%',
+  },
   greeting: {
     fontSize: FontSizes.medium,
   },
