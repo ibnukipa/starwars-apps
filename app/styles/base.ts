@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { Colors, FontSizes, Radii, Spaces } from "../constants";
+import {Colors, FontSizes, Radii, Spaces} from '../constants';
 
 export const BaseStyle = StyleSheet.create({
   container: {
@@ -100,6 +100,9 @@ export const BaseStyle = StyleSheet.create({
   },
   flexEnd: {
     alignSelf: 'flex-end',
+  },
+  flipX: {
+    transform: [{scaleX: -1}],
   },
   headerContainer: {
     paddingBottom: Spaces.small,

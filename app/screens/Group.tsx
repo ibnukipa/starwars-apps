@@ -35,14 +35,14 @@ const Group: React.FC<StackScreenProps<RootStackParamList, 'Group'>> = ({
     return [
       [
         {
-          icon: 'usersGroup',
+          icon: 'bankNote',
           label: 'Cost',
           value: getAbbreviateNumber(group.starWarsProfile?.cost_in_credits),
           isCard: true,
           colorScheme: COLOR_SCHEME,
         },
         {
-          icon: 'usersGroup',
+          icon: 'spedometerLow',
           label: 'Speed',
           value: getAbbreviateNumber(
             group.starWarsProfile?.max_atmosphering_speed,
@@ -51,7 +51,7 @@ const Group: React.FC<StackScreenProps<RootStackParamList, 'Group'>> = ({
           colorScheme: COLOR_SCHEME,
         },
         {
-          icon: 'usersGroup',
+          icon: 'userId',
           label: 'Passenger',
           value: getAbbreviateNumber(group.starWarsProfile?.passengers),
           isCard: true,
@@ -60,21 +60,22 @@ const Group: React.FC<StackScreenProps<RootStackParamList, 'Group'>> = ({
       ],
       [
         {
-          icon: 'usersGroup',
+          icon: 'box',
           label: 'Cargo',
           value: getAbbreviateNumber(group.starWarsProfile?.cargo_capacity),
           isCard: true,
           colorScheme: COLOR_SCHEME,
         },
         {
-          icon: 'usersGroup',
+          icon: 'handStars',
           label: 'Rate',
           value: getAbbreviateNumber(group.starWarsProfile?.hyperdrive_rating),
           isCard: true,
           colorScheme: COLOR_SCHEME,
+          isIconFlip: true,
         },
         {
-          icon: 'usersGroup',
+          icon: 'planet',
           label: 'MGLT',
           value: getAbbreviateNumber(group.starWarsProfile?.MGLT),
           isCard: true,
@@ -92,7 +93,7 @@ const Group: React.FC<StackScreenProps<RootStackParamList, 'Group'>> = ({
       ],
       [
         {
-          icon: 'usersGroup',
+          icon: 'userHands',
           label: 'Crew',
           value: group.starWarsProfile?.crew,
           isCard: false,

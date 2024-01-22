@@ -14,6 +14,7 @@ type CardItemProps = {
   colorScheme?: IColorSchemes;
   icon?: IIcons;
   isFloatingLabel?: boolean;
+  isIconFlip?: boolean;
 };
 
 export interface CardContentProps {
@@ -27,6 +28,7 @@ const CardItem: React.FC<CardItemProps> = ({
   icon,
   isCard,
   isFloatingLabel,
+  isIconFlip,
 }) => {
   const {plus1ColorKey, plus2ColorKey, min1ColorKey, min4Color, min1Color} =
     useColorScheme(colorScheme);
@@ -50,6 +52,7 @@ const CardItem: React.FC<CardItemProps> = ({
             styles.iconBackground,
             isCard && styles.iconBackgroundCard,
             !isCard && styles.iconBackgroundCardSingle,
+            isIconFlip && BaseStyle.flipX,
           ]}
           size={isCard ? IconSize.GIGANTIC : IconSize.LARGE}
           color={min1ColorKey}
