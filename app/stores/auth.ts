@@ -40,8 +40,8 @@ const useAuthStore = create(
           message: 'Please complete the sign-in form',
           colorScheme: 'citrusYellow',
         });
-        setState({isSignInLoading: true});
-        return;
+        setState({isSignInLoading: false});
+        return false;
       }
 
       // call API
@@ -119,6 +119,7 @@ const useAuthStore = create(
           password: signUpForm.password,
           nameAlias: signUpForm.nameAlias,
           avatar: signUpForm.avatar,
+          jobTitle: signUpForm.jobTitle,
           startWarProfile: people,
 
           // need to initiate in order to avoid nullish check

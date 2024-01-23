@@ -53,7 +53,9 @@ const Group: React.FC<StackScreenProps<RootStackParamList, 'Group'>> = ({
         {
           icon: 'userId',
           label: 'Passenger',
-          value: getAbbreviateNumber(group.starWarsProfile?.passengers),
+          value: getAbbreviateNumber(
+            group.starWarsProfile?.passengers?.replace(',', ''),
+          ),
           isCard: true,
           colorScheme: COLOR_SCHEME,
         },

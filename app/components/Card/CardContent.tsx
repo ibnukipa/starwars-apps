@@ -40,7 +40,7 @@ const CardItem: React.FC<CardItemProps> = ({
         isCard && {borderColor: min1Color},
         !isCard && {backgroundColor: min4Color, borderWidth: 0},
         !isCard && !isFloatingLabel && BaseStyle.row,
-        !isCard && BaseStyle.verticalCentered,
+        !isCard && !isFloatingLabel && BaseStyle.verticalCentered,
         !isCard && BaseStyle.spaceBetween,
         !isCard && styles.cardSingle,
         isFloatingLabel && styles.cardContainerFloatingLabel,

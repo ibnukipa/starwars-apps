@@ -18,19 +18,19 @@ export interface Starship {
   starship_class?: string;
 }
 
-export const getStarship = (id: string): Promise<Starship | null> => {
+export const searchStarshipApi = (key: string): Promise<Starship | null> => {
   return new Promise(async resolve => {
     const response = await fetchWithTimeout(
-      `https://swapi.dev/api/starships/${id}`,
+      `https://swapi.dev/api/starships/?search=${key}`,
     );
     if (!response?.ok || !response) {
       resolve(null);
     } else {
-      const responseJson: Starship = await response?.json();
-      if (responseJson) {
+      const responseJson: {results: Array<Starship>} = await response?.json();
+      if (responseJson.results.length === 0) {
         resolve(null);
       }
-      resolve(responseJson);
+      resolve(responseJson.results[0]);
     }
   });
 };

@@ -1,10 +1,10 @@
-import {getStarship, Starship} from '../apis';
+import {searchStarshipApi, Starship} from '../apis';
 import {create} from 'zustand';
 import {immer} from 'zustand/middleware/immer';
 
 import {CreateGroupForm, InviteGroupMemberForm} from '../forms';
 import {showToast} from '../components';
-import {fetchWithTimeout, removeValue} from '../utils';
+import {fetchWithTimeout, generateUUID, removeValue} from '../utils';
 import useAuthStore from './auth.ts';
 import useUserStore, {User} from './users.ts';
 import useNotificationStore from './notifications.ts';
@@ -167,18 +167,18 @@ const useGroupStore = create(
         addInvitedGroupIdByEmails,
       } = useUserStore.getState();
       const {groupInvitation} = useNotificationStore.getState();
-      const {add: addGroup, groups} = getState();
+      const {add: addGroup} = getState();
       let newGroup: Group | null = null;
 
       if (!response || !response.ok) {
         // in-memory strategy
-        const id = String(Object.keys(groups).length + 1);
-        const starship = await getStarship(id);
+        const starship = await searchStarshipApi(groupForm.name);
         const invitedMemberIds = getUserIdsByEmails(
           groupForm.invitedMemberEmails,
         );
+        const uuid = generateUUID();
         newGroup = {
-          id,
+          id: uuid,
           name: groupForm.name,
           description: groupForm.description,
           avatar: groupForm.avatar,
